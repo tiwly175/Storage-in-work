@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>WorkLife – งานและเงินของฉัน</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1b1a17">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="WorkLife">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f1eee6;--s:#f9f7f1;--s2:#ebe7dc;--tx:#1b1a17;--mu:#78726a;--ln:#d8d2c5;--ac:#1b1a17;--oa:#f9f7f1;--or:#d4470f;--ot:#d4470f;--up:#2c6a3a;--dn:#b3261e;--acs:#ebe7dc;--ups:#e3ecdf;--dns:#f3dedb;--ots:#f6e1d6;--mo:'IBM Plex Mono','IBM Plex Sans Thai',ui-monospace,monospace;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);font-family:'IBM Plex Sans Thai',system-ui,sans-serif;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#131210;--s:#1a1917;--s2:#24221e;--tx:#ece8de;--mu:#9b9588;--ln:#34312b;--ac:#ece8de;--oa:#131210;--or:#ff8a4c;--ot:#ff8a4c;--up:#6fc07f;--dn:#ff7c70;--acs:#24221e;--ups:#1d2a20;--dns:#33201e;--ots:#3a2417;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#131210;--s:#1a1917;--s2:#24221e;--tx:#ece8de;--mu:#9b9588;--ln:#34312b;--ac:#ece8de;--oa:#131210;--or:#ff8a4c;--ot:#ff8a4c;--up:#6fc07f;--dn:#ff7c70;--acs:#24221e;--ups:#1d2a20;--dns:#33201e;--ots:#3a2417;color-scheme:dark}
+*{box-sizing:border-box;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--tx);font-size:15px;line-height:1.5;max-width:520px;margin:0 auto;padding:0 16px 104px}
+.mo,.big,.cols b,.kv b,.day,.mn b,.tag,.leg,.hd small,input[type=number],input[type=time],input[type=date]{font-family:var(--mo);font-variant-numeric:tabular-nums}
+.hd{padding:22px 0 12px;border-bottom:2px solid var(--tx);margin-bottom:16px}
+.hd small{display:block;font-size:11.5px;letter-spacing:.08em;color:var(--mu);text-transform:uppercase}
+.hd h1{font-size:30px;font-weight:700;letter-spacing:-.01em;line-height:1.25;margin-top:2px}
+.c{background:var(--s);border:1px solid var(--ln);border-radius:6px;padding:16px;margin-bottom:12px}
+.tk{border-top:3px solid var(--tx)}
+.lbl,.sub,small{color:var(--mu);font-size:12.5px}
+.big{font-size:30px;font-weight:600;letter-spacing:-.03em;line-height:1.15;margin-top:4px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}.g2 .big{font-size:25px}
+.rc{margin-top:16px;padding-top:12px;border-top:1px dashed var(--mu)}
+h3{font-size:15px;font-weight:700}h4{font-size:13px;font-weight:700;letter-spacing:.04em;margin-bottom:4px}
+.sec{display:flex;justify-content:space-between;align-items:baseline;margin:22px 0 8px;padding-top:8px;border-top:1px solid var(--tx)}
+.row2{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.chip,.tag{display:inline-block;border:1px solid currentColor;border-radius:3px;padding:0 7px;font-size:12px;line-height:20px;font-weight:600;background:none;color:var(--mu);white-space:nowrap}
+.chip.ac,.tag.ac{color:var(--tx)}.chip.up,.tag.up{color:var(--up)}.chip.dn{color:var(--dn)}.chip.ot,.tag.ot{color:var(--or)}
+.pos{color:var(--up)}.neg{color:var(--dn)}.otc{color:var(--or)}
+.bar{display:flex;gap:2px;height:14px;margin-top:16px}.bar i{display:block;background:repeating-linear-gradient(135deg,var(--ln) 0 2px,transparent 2px 5px);min-width:0;border-radius:1px}
+.leg{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:8px;font-size:12px;color:var(--mu)}.leg b{display:inline-block;width:9px;height:9px;margin-right:6px;border-radius:1px}
+.cols{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;margin-top:14px;padding-top:12px;border-top:1px solid var(--ln)}
+.cols>div+div{border-left:1px solid var(--ln);padding-left:12px}.cols>div:first-child{padding-right:6px}
+.cols span{display:block;font-size:12px;color:var(--mu)}.cols b{font-size:14.5px;font-weight:600}
+button{font:inherit;cursor:pointer;border:0;color:inherit;background:none}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--or);outline-offset:2px}
+.btn{width:100%;height:52px;border-radius:4px;font-weight:600;font-size:15.5px;margin-top:12px}
+.p{background:var(--ac);color:var(--oa)}.clk{background:var(--or);color:#fff}.s{border:1px solid var(--tx)}.g{color:var(--dn)}.d{background:var(--dn);color:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.two .btn{margin-top:12px}.two .fld{margin-top:12px}
+.lnk{font-weight:600;font-size:14px;text-decoration:underline;text-underline-offset:3px;padding:10px 0 0}.sec .lnk{padding:0}
+.kv{display:flex;align-items:baseline;padding:8px 0}
+.kv>div{order:0;min-width:0}.kv>div:last-child:not(:first-child){order:2}
+.kv::after{content:'';order:1;flex:1;min-width:14px;border-bottom:1px dotted var(--mu);margin:0 6px;transform:translateY(-4px)}
+.kv b{order:2;font-weight:600;white-space:nowrap}.kv small{display:block}
+.kv.nl{align-items:flex-start;justify-content:space-between;gap:12px;border-top:1px solid var(--ln);padding:10px 0}.kv.nl:first-child{border-top:0}.kv.nl::after{display:none}.kv.nl>div:last-child small{white-space:nowrap}
+.tot{border-top:2px solid var(--tx);margin-top:6px;padding-top:10px;justify-content:space-between}.tot::after{display:none}.tot span{font-weight:700}.tot b{font-size:19px}
+details>summary{cursor:pointer;font-weight:600;font-size:14px;list-style:none;display:flex;justify-content:space-between}
+details>summary::after{content:'+';color:var(--mu);font-size:18px;line-height:1}details[open]>summary::after{content:'−'}
+details>summary+*{margin-top:10px}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}.wd{text-align:center;font-size:11.5px;color:var(--mu);font-family:var(--mo)}
+.day{min-width:0;overflow:hidden;aspect-ratio:1/1.3;border:1px solid var(--ln);background:transparent;border-radius:3px;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;padding:4px;position:relative}
+.day i{font-style:normal;font-size:11px;opacity:.7;line-height:1}.day b{font-size:12.5px;font-weight:600;line-height:1}
+.day.w{border-color:var(--tx)}.hh{display:flex;flex-direction:column;gap:2px;width:100%}.hh b{display:block;border-radius:2px;padding:1px 2px;font-size:10.5px;line-height:1.4;text-align:center;letter-spacing:-.02em}.hh .n{background:var(--ac);color:var(--oa)}.hh .o{background:var(--or);color:#fff}.day .lv{font-size:12px;color:var(--mu)}
+.day.l{background:repeating-linear-gradient(135deg,var(--ln) 0 2px,transparent 2px 6px);color:var(--mu)}
+.day.t{outline:2px solid var(--tx);outline-offset:2px}.day u{position:absolute;top:4px;right:4px;width:6px;height:6px;background:var(--dn);border-radius:50%}
+.mn{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;border:1px solid var(--tx);border-radius:4px}.mn button{width:50px;height:44px;font-size:20px}.mn b{font-size:15px;font-weight:600}
+.bar2{height:6px;background:var(--s2);margin-top:6px}.bar2 i{display:block;height:100%;background:var(--tx)}
+input,select{width:100%;font:inherit;height:46px;padding:0 12px;border:1px solid var(--ln);border-radius:4px;background:var(--s);color:var(--tx)}
+input:focus,select:focus{outline:0;border-color:var(--tx);box-shadow:0 0 0 1px var(--tx)}
+.fld{margin-top:14px}.fld label{display:block;font-size:12px;letter-spacing:.03em;color:var(--mu);margin-bottom:5px}.fld small{display:block;margin-top:5px}
+.in{display:flex;align-items:center;border:1px solid var(--ln);border-radius:4px;background:var(--s);padding-right:12px}.in:focus-within{border-color:var(--tx);box-shadow:0 0 0 1px var(--tx)}.in input{border:0;background:none;box-shadow:none!important}.in span{color:var(--mu);font-size:13px;white-space:nowrap}
+.seg{display:flex;border:1px solid var(--tx);border-radius:4px;overflow:hidden}.seg button{flex:1;height:40px;font-size:13.5px;font-weight:600;border-left:1px solid var(--tx)}.seg button:first-child{border-left:0}.seg .on{background:var(--ac);color:var(--oa)}
+.x{color:var(--mu);padding:4px 8px}.em{text-align:center;color:var(--mu);padding:20px 0;font-size:13.5px}
+.warn p{font-size:13.5px;color:var(--dn);margin-top:8px}
+.pv{border:1px dashed var(--mu);border-radius:4px;padding:12px 14px;margin-top:16px}
+.ar{display:grid;grid-template-columns:88px 1fr 84px 30px;gap:6px;margin-top:8px}.ar input,.ar select{padding:0 8px;height:42px}
+textarea{width:100%;height:190px;font:inherit;font-size:12px;background:var(--s);color:var(--tx);border:1px solid var(--ln);border-radius:4px;padding:10px;margin-top:12px}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--s);border-top:1px solid var(--tx);padding:0 0 env(safe-area-inset-bottom,0px);z-index:5}
+nav div{display:flex;max-width:520px;margin:0 auto}
+nav button{flex:1;height:56px;font-size:13.5px;font-weight:500;color:var(--mu);position:relative}
+nav .on{color:var(--tx);font-weight:700}nav .on::before{content:'';position:absolute;left:18%;right:18%;top:-1px;height:3px;background:var(--tx)}
+#ov{position:fixed;inset:0;background:rgba(10,9,7,.55);display:none;align-items:flex-end;justify-content:center;z-index:10}#ov.show{display:flex}
+#sh{background:var(--s);width:100%;max-width:520px;border-top:3px solid var(--tx);border-radius:10px 10px 0 0;padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px));max-height:92vh;overflow:auto}.grab{display:none}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<nav><div id="nav"></div></nav>
+<div id="ov" onclick="if(event.target===this)closeSh()"><div id="sh"></div></div>
+<script>
+const K='worklife.v1';
+const DEF=()=>({set:{wage:400,std:8,m1:1.5,m2:2,m3:3,brk:60,shifts:'05:00=55, 06:00=0',grace:0,lm:1,bonus:0,bmode:'d',sso:0,goal:0,budget:0,theme:'auto'},att:[],tx:[],adj:[]});
+const CATS={expense:['อาหาร','เดินทาง','บิล/ที่พัก','ช้อปปิ้ง','สุขภาพ','บันเทิง','อื่นๆ'],income:['งานเสริม','เงินคืน','อื่นๆ']};
+let S=load(),tab='home',mon='',ft='expense',dOpen=true,AJ=[],TE=null;
+function load(){try{const j=JSON.parse(localStorage.getItem(K))||{},d=DEF(),s=Object.assign(d.set,j.set);if(!/=/.test(s.shifts))s.shifts=DEF().set.shifts;return{set:s,att:j.att||[],tx:j.tx||[],adj:j.adj||[]}}catch(e){return DEF()}}
+function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
+const pad=n=>String(n).padStart(2,'0');
+const ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+function ym(d){return ymd(d).slice(0,7)}
+const hm=d=>pad(d.getHours())+':'+pad(d.getMinutes());
+const tm=s=>{const a=s.split(':');return +a[0]*60+ +a[1]};
+const money=n=>'฿'+n.toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2});
+const dur=m=>Math.floor(m/60)+' ชม. '+pad(Math.round(m)%60)+' น.';
+const dth=s=>new Date(s+'T00:00').toLocaleDateString('th-TH',{weekday:'short',day:'numeric',month:'short'});
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const hourly=()=>S.set.wage/S.set.std;
+const shiftMap=()=>String(S.set.shifts||'').split(',').map(s=>s.trim().split('=')).filter(a=>/^\d{1,2}:\d{2}$/.test(a[0].trim())).map(a=>({t:pad(+a[0].split(':')[0])+':'+a[0].split(':')[1],al:+a[1]||0}));
+const shifts=()=>shiftMap().map(x=>x.t);
+const shiftAl=p=>{const x=shiftMap().find(y=>y.t===p);return x?x.al:0};
+function autoPlan(t){let b='',bd=181;shifts().forEach(s=>{let d=Math.abs(tm(t)-tm(s));d=Math.min(d,1440-d);if(d<bd){bd=d;b=s}});return b}
+const otAt=e=>{const m=(tm(e.in)+S.set.std*60+(+e.brk||0))%1440;return pad(Math.floor(m/60))+':'+pad(m%60)};
+const LV={lp:'ลา (ได้ค่าแรง)',lu:'ลา/ขาด (ไม่ได้ค่าแรง)',off:'วันหยุด (ไม่ทำงาน)'};
+const isLv=e=>!!LV[e.dt];
+const adjSum=e=>(e.adj||[]).reduce((s,x)=>s+(x.s||1)*(+x.v||0),0);
+const TYOPT=e=>[['n','วันทำงานปกติ (โอที ×'+S.set.m1+')'],['h','ทำงานวันหยุด (ค่าแรง ×'+S.set.m2+' / โอที ×'+S.set.m3+')'],['lp','ลา – ได้ค่าแรง'],['lu','ลา/ขาด – ไม่ได้ค่าแรง'],['off','วันหยุด (ไม่ทำงาน)']].map(x=>`<option value="${x[0]}" ${(e.dt||'n')===x[0]?'selected':''}>${x[1]}</option>`).join('');
+const ajHtml=()=>AJ.map((x,i)=>`<div class="ar"><select onchange="AJ[${i}].s=+this.value;prev()"><option value="1" ${x.s>0?'selected':''}>＋ เพิ่ม</option><option value="-1" ${x.s<0?'selected':''}>− หัก</option></select><input placeholder="รายการ" value="${esc(x.n||'')}" oninput="AJ[${i}].n=this.value"><input type="number" inputmode="decimal" placeholder="บาท" value="${x.v||''}" oninput="AJ[${i}].v=parseFloat(this.value)||0;prev()"><button class="x" onclick="AJ.splice(${i},1);ajRender();prev()" aria-label="ลบ">✕</button></div>`).join('');
+const ajRender=()=>{document.getElementById('aj').innerHTML=ajHtml()};
+function calc(e){if(isLv(e)){const base=e.dt==='lp'?S.set.wage:0,ax=adjSum(e);return{w:0,ot:0,lm:0,late:false,base,otp:0,al:0,ded:0,bon:0,hol:false,leave:true,ax,adj:e.adj||[],pay:base+ax}}if(!e.out)return null;let w=tm(e.out)-tm(e.in);if(w<0)w+=1440;w=Math.max(0,w-(+e.brk||0));
+ const ot=Math.max(0,w-S.set.std*60),h=hourly();let lm=0;if(e.plan){lm=tm(e.in)-tm(e.plan);if(lm<-720)lm+=1440;if(lm>720)lm-=1440;lm=Math.max(0,lm)}
+ const late=lm>(+S.set.grace||0),hol=e.dt==='h',base=hol?S.set.std*h*S.set.m2:S.set.wage,otp=ot/60*h*(hol?S.set.m3:S.set.m1),al=shiftAl(e.plan),ded=late?lm/60*h*S.set.lm:0,bon=S.set.bmode==='d'&&e.plan&&!late?(+S.set.bonus||0):0;
+ const ax=adjSum(e);return{w,ot,lm,late,base,otp,al,ded,bon,hol,ax,adj:e.adj||[],pay:base+al+otp-ded+bon+ax}}
+function attSum(m){let d=0,w=0,ot=0,otp=0,ded=0,bon=0,late=0,lmin=0,sin=0,sout=0,tp=0,bs=0,al=0,ax=0,lv=0;
+ S.att.filter(e=>e.date.startsWith(m)).forEach(e=>{const c=calc(e);if(!c)return;ax+=c.ax||0;if(c.leave){lv++;tp+=c.pay;bs+=c.base;return}d++;w+=c.w;ot+=c.ot;otp+=c.otp;ded+=c.ded;bon+=c.bon;tp+=c.pay;bs+=c.base;al+=c.al;if(c.late){late++;lmin+=c.lm}sin+=tm(e.in);sout+=tm(e.out)+(tm(e.out)<tm(e.in)?1440:0)});
+ const mb=S.set.bmode==='m'&&d>0&&late===0?(+S.set.bonus||0):0,ma=S.adj.filter(x=>x.m===m).reduce((s,x)=>s+(x.s||1)*(+x.v||0),0),gross=tp+mb+ma,sso=S.set.sso>0?Math.min(750,bs*S.set.sso/100):0;
+ return{d,w,ot,otp,ded,bon:bon+mb,late,lmin,sin,sout,base:bs,al,ax,lv,ma,sso,gross,net:gross-sso}}
+function txSum(m){let o=0,e=0;S.tx.filter(t=>t.date.startsWith(m)).forEach(t=>t.type==='income'?o+=t.amt:e+=t.amt);const wi=attSum(m).net;return{i:o+wi,wi,oi:o,e,n:o+wi-e}}
+const todayE=()=>S.att.find(e=>e.date===ymd(new Date()));
+const mt=m=>{m=Math.round(m)%1440;return pad(Math.floor(m/60))+':'+pad(m%60)};
+function shift(n){const p=mon.split('-');mon=ym(new Date(+p[0],+p[1]-1+n,1));render()}
+const monLabel=()=>{const p=mon.split('-');return new Date(+p[0],+p[1]-1,1).toLocaleDateString('th-TH',{month:'long',year:'numeric'})};
+const mnav=()=>`<div class="mn"><button onclick="shift(-1)" aria-label="เดือนก่อน">‹</button><b>${monLabel()}</b><button onclick="shift(1)" aria-label="เดือนถัดไป">›</button></div>`;
+const R=(l,v,c='',sub='')=>`<div class="kv"><div><span>${l}</span>${sub?`<small>${sub}</small>`:''}</div><b class="${c}">${v}</b></div>`;
+const cols=a=>`<div class="cols">${a.map(x=>`<div><span>${x[0]}</span><b class="${x[2]||''}">${x[1]}</b></div>`).join('')}</div>`;
+const payRows=c=>{const r=hourly()*(c.hol?S.set.m3:S.set.m1);return`<div class="pr">${R(c.leave?'ค่าแรงวันลา':c.hol?'ค่าแรงวันหยุด':'ค่าแรงรายวัน',money(c.base),'',c.hol?'ชั่วโมงปกติ × '+S.set.m2:'')}${c.al?R('ค่ากะ',money(c.al)):''}${c.ot?R('ค่าโอที',money(c.otp),'otc',dur(c.ot)+' × '+money(r)+'/ชม. (×'+(c.hol?S.set.m3:S.set.m1)+')'):''}${c.lm>0?R('หักสาย',c.late?'-'+money(c.ded):money(0),c.late?'neg':'','สาย '+c.lm+' นาที'+(c.late?'':' (อยู่ในเวลาผ่อนผัน)')):''}${c.bon?R('เบี้ยขยัน','+'+money(c.bon),'','เข้างานตรงเวลา'):''}${(c.adj||[]).map(x=>R(x.n||'ปรับยอด',(x.s<0?'-':'+')+money(+x.v||0),x.s<0?'neg':'','ปรับยอดเอง')).join('')}<div class="kv tot"><span>รวม</span><b>${money(c.pay)}</b></div></div>`};
+const tl=(c,x)=>{const N=S.set.std*60,a=Math.min(c.w,N),rest=Math.max(0,N-c.w);return`<div class="bar"><i style="flex:${a};background:var(--ac)"></i><i style="flex:${c.ot};background:var(--or)"></i><i style="flex:${rest}"></i></div><div class="leg"><span><b style="background:var(--ac)"></b>ปกติ ${hmm(a)}</span><span><b style="background:var(--or)"></b>โอที ${hmm(c.ot)}</span></div>`};
+
+const ICON={home:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',time:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',money:'<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/>',set:'<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>'};
+const TABS=[['home','วันนี้'],['time','เวลางาน'],['money','การเงิน'],['set','ตั้งค่า']];
+function go(t){tab=t;render();window.scrollTo(0,0)}
+function render(){
+ document.getElementById('nav').innerHTML=TABS.map(t=>`<button class="${tab===t[0]?'on':''}" onclick="go('${t[0]}')">${t[1]}</button>`).join('');
+ const T={home:'วันนี้',time:'เวลางาน',money:'การเงิน',set:'ตั้งค่า'}[tab],d=new Date().toLocaleDateString('th-TH',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+ document.getElementById('app').innerHTML=`<div class="hd"><small>WorkLife · ${d}</small><h1>${T}</h1></div>`+({home:vHome,time:vTime,money:vMoney,set:vSet})[tab]();
+}
+const hmm=m=>pad(Math.floor(m/60))+':'+pad(Math.round(m)%60);
+function hero(){const e=todayE(),n=new Date(),k=!e?0:isLv(e)?4:e.out?3:e.bs?2:1,L=['ยังไม่เข้างาน','กำลังทำงาน','กำลังพัก','เลิกงานแล้ว',LV[e&&e.dt]||''][k],CC=['','ac','ot','up','ot'][k];
+ const x=e&&(e.out?e:Object.assign({},e,{out:hm(n),brk:(+e.brk||0)+(e.bs?Math.round((Date.now()-e.bs)/60000):0)})),c=x&&calc(x),p=autoPlan(hm(n));let btn;
+ if(k===0)btn=`<button class="btn clk" onclick="clockIn()">เข้างานตอนนี้</button><button class="btn s" onclick="openAtt()">ตั้งเวลาเข้างานเอง</button>`;
+ else if(k>=3)btn=`<button class="btn s" onclick="openAtt('${e.id}')">แก้ไข / ปรับยอด (+ −)</button>`;
+ else btn=`<div class="two"><button class="btn s" onclick="brk('${e.id}')">${e.bs?'จบพัก':'เริ่มพัก'}</button><button class="btn clk" onclick="openAtt('${e.id}',1)">เลิกงาน</button></div><button class="lnk" onclick="openAtt('${e.id}')">แก้ไข / ปรับยอด (+ −)</button>`;
+ const when=e&&k!==4?e.in+(e.out?' → '+e.out:' → …')+(e.plan?' · กะ '+e.plan:'')+' · พัก '+(x.brk||0)+' น.':'';
+ return`<section class="c tk"><div class="row2"><span class="tag ${CC}">● ${L}</span><span class="sub mo">${when}</span></div>
+ <div class="g2"><div><div class="lbl">ทำงานสุทธิ (ชม.:น.)</div><div class="big">${c&&!c.leave?hmm(c.w):'--:--'}</div></div><div><div class="lbl">รายได้วันนี้${k>=3?'':' (ประมาณ)'}</div><div class="big">${money(c?c.pay:0)}</div></div></div>
+ ${k===4?'<div class="sub" style="margin-top:10px">บันทึกเป็นวันลา/หยุดแล้ว</div>':c?tl(c,x)+(k<3?`<div class="sub" style="margin-top:6px">โอทีเริ่มหลัง ${otAt(e)} น.</div>`:''):`<div class="sub" style="margin-top:10px">${p?'ระบบจะจับเป็นกะ '+p+(shiftAl(p)?' (ค่ากะ '+money(shiftAl(p))+')':'')+' ให้อัตโนมัติ':'กดเข้างานเพื่อเริ่มนับเวลาและค่าแรง'}</div>`}
+ ${c?`<div class="rc"><div class="lbl" style="margin-bottom:2px">วิธีคิดเงินวันนี้</div>${payRows(c)}</div>`:''}${btn}</section>`}
+function health(){const now=new Date(),days=[];for(let i=0;i<7;i++){const d=new Date(now);d.setDate(d.getDate()-i);days.push(ymd(d))}
+ const wk=S.att.filter(e=>days.includes(e.date)&&e.out).map(e=>calc(e)),w=wk.reduce((s,c)=>s+c.w,0),ot=wk.reduce((s,c)=>s+c.ot,0),mx=Math.max(0,...wk.map(c=>c.w))/60;
+ let st=0;for(let i=0;i<40;i++){const d=new Date(now);d.setDate(d.getDate()-i);if(S.att.some(e=>e.date===ymd(d)&&!isLv(e)))st++;else if(i>0)break}
+ const ts=(d,t)=>new Date(d+'T'+t).getTime(),L=S.att.filter(e=>e.out).sort((a,b)=>ts(a.date,a.in)-ts(b.date,b.in));let rest=null;
+ if(L.length>1){const a=L[L.length-2],b=L[L.length-1];let end=ts(a.date,a.out);if(end<ts(a.date,a.in))end+=864e5;rest=(ts(b.date,b.in)-end)/36e5}
+ const W=[];if(mx>12)W.push('ทำงานวันเดียว '+mx.toFixed(1)+' ชม. (เกิน 12 ชม.) ควรพักให้พอ');if(ot/60>36)W.push('โอที 7 วันล่าสุดเกิน 36 ชม.');if(st>=6)W.push('ทำงานติดกัน '+st+' วัน ควรมีวันหยุด');if(rest!==null&&rest>=0&&rest<11)W.push('พักระหว่างกะแค่ '+rest.toFixed(1)+' ชม. (ควร 11 ชม. ขึ้นไป)');
+ return`<div class="c"><div class="row2"><h3>สุขภาพการทำงาน</h3><span class="chip ${W.length?'dn':'up'}">${W.length?'ควรระวัง':'ปกติ'}</span></div>${cols([['7 วันล่าสุด',(w/60).toFixed(1)+' ชม.'],['โอที',(ot/60).toFixed(1)+' ชม.','otc'],['ติดกัน',st+' วัน']])}${W.length?`<div class="warn">${W.map(x=>`<p>⚠ ${x}</p>`).join('')}</div>`:''}</div>`}
+function vHome(){const m=ym(new Date()),a=attSum(m),f=txSum(m),rec=S.tx.slice().sort((x,y)=>y.date.localeCompare(x.date)||y.id.localeCompare(x.id)).slice(0,4);
+ return hero()+(S.att.length?'':`<div class="c"><h4>เริ่มต้นใช้งาน</h4><p class="sub" style="margin-top:6px;line-height:1.8">1. ไปที่ <b>ตั้งค่า</b> ใส่ค่าแรง เวลากะ และค่ากะ<br>2. กด <b>เข้างานตอนนี้</b> ตอนเข้า และ <b>เลิกงาน</b> ตอนเลิก<br>3. ลืมกด? แตะวันที่ในหน้า <b>เวลางาน</b> เพื่อเพิ่มย้อนหลัง<br>4. ยอดไหนไม่ตรง กด <b>แก้ไข / ปรับยอด</b> เพื่อ บวก/หัก เองได้ทุกรายการ</p></div>`)+`<div class="c"><div class="lbl">รายได้จากงานเดือนนี้</div><div class="big">${money(a.net)}</div>${cols([['วันทำงาน',a.d+' วัน'],['ชั่วโมงปกติ',hmm(a.w-a.ot)+' ชม.'],['ชั่วโมงโอที',hmm(a.ot)+' ชม.','otc']])}<button class="lnk" onclick="go('time')">ดูรายละเอียดรายวัน ›</button></div>`+health()
+ +`<div class="c"><div class="lbl">คงเหลือสุทธิเดือนนี้</div><div class="big ${f.n<0?'neg':''}">${money(f.n)}</div>${cols([['รายรับ',money(f.i),'pos'],['รายจ่าย',money(f.e),'neg']])}<div class="sub" style="margin-top:12px">รายรับรวมรายได้จากงาน ${money(f.wi)} ให้อัตโนมัติแล้ว</div></div><div class="sec"><h3>รายการล่าสุด</h3><button class="lnk" onclick="openTx()">+ เพิ่ม</button></div><div class="c">${txList(rec)}</div>`}
+function cal(){const p=mon.split('-'),y=+p[0],m=+p[1]-1,first=new Date(y,m,1).getDay(),n=new Date(y,m+1,0).getDate(),t=ymd(new Date());
+ let h=['อา','จ','อ','พ','พฤ','ศ','ส'].map(x=>`<div class="wd">${x}</div>`).join('')+'<div></div>'.repeat(first);
+ for(let d=1;d<=n;d++){const ds=mon+'-'+pad(d),e=S.att.find(x=>x.date===ds),c=e&&calc(e);h+=`<button class="day ${e?(c&&c.leave?'l':'w'):''} ${ds===t?'t':''}" onclick="${e?`openAtt('${e.id}')`:`openAtt('',0,'${ds}')`}"><i>${d}</i>${c?(c.leave?'<b class="lv">ลา</b>':`<span class="hh"><b class="n">${((c.w-c.ot)/60).toFixed(1)}</b>${c.ot?`<b class="o">+${(c.ot/60).toFixed(1)}</b>`:''}</span>`):''}${c&&c.hol?'<u></u>':''}</button>`}
+ return`<div class="c"><div class="cal">${h}</div><div class="leg" style="margin-top:12px"><span><b style="background:var(--ac)"></b>ชม.ปกติ</span><span><b style="background:var(--or)"></b>ชม.โอที (+)</span><span>จุดแดง = วันหยุด</span></div><div class="sub" style="margin-top:6px">แตะวันที่เพื่อเพิ่มหรือแก้ไข · ลายทาง = ลา/หยุด</div></div>`}
+function vTime(){const a=attSum(mon),L=S.att.filter(e=>e.date.startsWith(mon)).sort((x,y)=>y.date.localeCompare(x.date));
+ return mnav()+`<div class="c"><div class="lbl">รายได้จากงาน (ประมาณ)</div><div class="big">${money(a.net)}</div>${cols([['วันทำงาน',a.d+' วัน'],['ชั่วโมงปกติ',hmm(a.w-a.ot)+' ชม.'],['ชั่วโมงโอที',hmm(a.ot)+' ชม.','otc']])}</div>`+cal()
+ +`<div class="c"><details open><summary>สรุปการคิดเงินเดือนนี้</summary><div class="pr">${R('ค่าแรง',money(a.base),'',a.d+' วัน'+(a.lv?' + ลา '+a.lv+' วัน':''))}${R('ค่ากะ',money(a.al))}${R('ค่าโอที',money(a.otp),'otc')}${R('หักสาย','-'+money(a.ded),'neg',a.late+' ครั้ง · '+a.lmin+' นาที')}${R('เบี้ยขยัน',money(a.bon),'',S.set.bmode==='m'?'รายเดือน (ต้องไม่สายเลย)':'')}${a.ax?R('ปรับยอดรายวัน',(a.ax>0?'+':'')+money(a.ax)):''}${S.adj.filter(x=>x.m===mon).map(x=>`<div class="kv" onclick="openMadj('${x.id}')" style="cursor:pointer"><div><span>${esc(x.n||'ปรับยอด')}</span><small>รายเดือน · แตะเพื่อแก้ไข</small></div><b class="${x.s<0?'neg':''}">${x.s<0?'-':'+'}${money(+x.v||0)}</b></div>`).join('')}${a.sso?R('ประกันสังคม','-'+money(a.sso),'neg',S.set.sso+'% ของค่าแรง สูงสุด 750'):''}<div class="kv tot"><span>รวมสุทธิ</span><b>${money(a.net)}</b></div></div><button class="btn s" style="height:42px;margin-top:12px" onclick="openMadj()">+ เพิ่มรายการบวก/หักประจำเดือน</button><h4 style="margin-top:16px">ค่าเฉลี่ยต่อวันทำงาน</h4>${R('ชั่วโมงทำงาน',a.d?dur(a.w/a.d):'–')}${R('โอที',a.d?dur(a.ot/a.d):'–')}${R('เข้างาน',a.d?mt(a.sin/a.d):'–')}${R('เลิกงาน',a.d?mt(a.sout/a.d):'–')}</details></div>`
+ +`<div class="sec"><h3>รายวัน</h3></div><div class="c">${L.length?L.map(e=>{const c=calc(e);return`<div class="kv nl" onclick="openAtt('${e.id}')" style="cursor:pointer"><div><span>${dth(e.date)}</span> ${c&&c.late?`<span class="chip dn">สาย ${c.lm} น.</span>`:''} ${c&&c.ot?`<span class="chip ot">OT ${dur(c.ot)}</span>`:''} ${c&&c.hol?'<span class="chip">วันหยุด</span>':''}<small>${c&&c.leave?LV[e.dt]:e.in+' – '+(e.out||'ยังไม่เลิก')}${e.plan?' · กะ '+e.plan:''}${e.note?' · '+esc(e.note):''}</small></div><div style="text-align:right"><b>${c?money(c.pay):'–'}</b><small>${c&&!c.leave?hmm(c.w-c.ot)+(c.ot?' + '+hmm(c.ot)+' OT':'')+' ชม.':''}${c&&c.ax?' · ปรับ '+(c.ax>0?'+':'')+money(c.ax):''}</small></div></div>`}).join(''):'<div class="em">ยังไม่มีบันทึกในเดือนนี้</div>'}</div>`}
+function clockIn(){S.att.push({id:uid(),date:ymd(new Date()),in:hm(new Date()),out:'',brk:S.set.brk,note:'',plan:autoPlan(hm(new Date()))});save();render()}
+function brk(id){const e=S.att.find(x=>x.id===id);if(!e)return;if(e.bs){e.brk=(+e.brk||0)+Math.max(1,Math.round((Date.now()-e.bs)/60000));e.bs=0}else{if(!e.bt){e.brk=0;e.bt=1}e.bs=Date.now()}save();render()}
+function openAtt(id,now,date){const td=ymd(new Date()),e=Object.assign({},S.att.find(x=>x.id===id)||{date:date||td,in:(date&&date!==td)?(shifts()[0]||'08:00'):hm(new Date()),out:'',brk:S.set.brk,note:''});
+ if(now)e.out=hm(new Date());if(now&&e.bs)e.brk=(+e.brk||0)+Math.round((Date.now()-e.bs)/60000);if(!id)e.plan=autoPlan(e.in);AJ=(e.adj||[]).map(x=>Object.assign({},x));
+ const ops=shifts().concat(!e.plan||shifts().includes(e.plan)?[]:[e.plan]).map(s=>`<option ${s===e.plan?'selected':''}>${s}</option>`).join('');
+ sheet(`<div class="grab"></div><h3>${id?'แก้ไขเวลาทำงาน':'เพิ่มเวลาทำงาน'}</h3><div class="fld"><label>วันที่</label><input type="date" id="a_d" value="${e.date}"></div>
+ <div class="fld"><label>ประเภทวัน</label><select id="a_t" onchange="prev()">${TYOPT(e)}</select></div><div id="tt"><div class="two"><div class="fld"><label>เข้างาน</label><input type="time" id="a_i" value="${e.in}" oninput="prev()"></div><div class="fld"><label>เลิกงาน</label><input type="time" id="a_o" value="${e.out}" oninput="prev()"></div></div>
+ <div class="two"><div class="fld"><label>กะ (คิดสายและค่ากะ)</label><select id="a_p" onchange="prev()"><option value="">ไม่ระบุกะ</option>${ops}</select></div><div class="fld"><label>พัก (นาที)</label><input type="number" id="a_b" value="${e.brk}" oninput="prev()"></div></div>
+ </div><div class="fld"><label>ปรับยอด บวก/หัก เฉพาะรายการนี้</label><div id="aj">${ajHtml()}</div><button class="lnk" onclick="AJ.push({n:'',s:1,v:0});ajRender()">+ เพิ่มรายการปรับยอด (เช่น ค่าข้าว, หักขาด)</button></div>
+ <div class="fld"><label>บันทึก</label><input id="a_n" value="${esc(e.note||'')}"></div><div id="pv"></div><button class="btn p" onclick="saveAtt('${id||''}')">บันทึก</button>${id?`<button class="btn g" onclick="delAtt('${id}')">ลบรายการ</button>`:''}`);prev()}
+function prev(){const v=k=>document.getElementById(k).value,p=document.getElementById('pv');if(!p)return;const e={in:v('a_i'),out:v('a_o'),brk:+v('a_b')||0,plan:v('a_p'),dt:v('a_t'),adj:AJ};document.getElementById('tt').style.display=LV[e.dt]?'none':'';if(!e.in&&!LV[e.dt]){p.innerHTML='';return}
+ const c=calc(e);p.innerHTML=`<div class="pv">${LV[e.dt]?'':`<div class="sub">โอทีเริ่มหลัง <b>${otAt(e)}</b> น.${c?'':' · ใส่เวลาเลิกงานเพื่อดูยอดเงิน'}</div>`}${c?`<div style="margin-top:6px">${c.leave?'':R('ทำงานสุทธิ',dur(c.w))}${payRows(c)}</div>`:''}</div>`}
+function saveAtt(id){const v=k=>document.getElementById(k).value;const lv=LV[v('a_t')];if(!v('a_d')||(!v('a_i')&&!lv))return;const o={date:v('a_d'),in:lv?'':v('a_i'),out:lv?'':v('a_o'),brk:+v('a_b')||0,note:v('a_n'),plan:lv?'':v('a_p'),dt:v('a_t'),adj:AJ.filter(x=>+x.v),bs:0};
+ if(id)Object.assign(S.att.find(x=>x.id===id),o);else S.att.push(Object.assign({id:uid()},o));save();closeSh();render()}
+function delAtt(id){S.att=S.att.filter(x=>x.id!==id);save();closeSh();render()}
+const cats=t=>{const l=(S.set[t==='income'?'ci':'ce']||'').split(',').map(s=>s.trim()).filter(Boolean);return l.length?l:CATS[t]};
+function txList(l,extra=''){return extra+(l.length?l.map(t=>`<div class="kv nl"><div onclick="openTx('${t.id}')" style="cursor:pointer;flex:1"><span>${esc(t.note||t.cat)}</span><small>${dth(t.date)} · ${t.cat}</small></div><div style="display:flex;align-items:center;gap:4px"><b class="${t.type==='income'?'pos':'neg'}">${t.type==='income'?'+':'-'}${money(t.amt)}</b><button class="x" onclick="delTx('${t.id}')" aria-label="ลบ">✕</button></div></div>`).join(''):(extra?'':'<div class="em">ยังไม่มีรายการ แตะ + เพิ่ม เพื่อเริ่มบันทึก</div>'))}
+function vMoney(){const f=txSum(mon),l=S.tx.filter(t=>t.date.startsWith(mon)).sort((x,y)=>y.date.localeCompare(x.date)||y.id.localeCompare(x.id)),by={};
+ l.filter(t=>t.type==='expense').forEach(t=>by[t.cat]=(by[t.cat]||0)+t.amt);const cs=Object.entries(by).sort((a,b)=>b[1]-a[1]),B=+S.set.budget;
+ const wr=f.wi>0?`<div class="kv"><div><span>รายได้จากงาน</span><small>คำนวณอัตโนมัติจากเวลางาน</small></div><b class="pos">+${money(f.wi)}</b></div>`:'';
+ return mnav()+`<div class="c"><div class="lbl">คงเหลือสุทธิ</div><div class="big ${f.n<0?'neg':''}">${money(f.n)}</div>${cols([['รายรับ',money(f.i),'pos'],['รายจ่าย',money(f.e),'neg']])}<div class="sub" style="margin-top:12px">รายรับ = งาน ${money(f.wi)} + อื่นๆ ${money(f.oi)}</div></div>`
+ +(B>0?`<div class="c"><div class="row2"><span class="lbl">งบรายจ่ายเดือนนี้</span><b class="${f.e>B?'neg':''}">${money(f.e)} / ${money(B)}</b></div><div class="bar2"><i style="width:${Math.min(100,f.e/B*100)}%;${f.e>B?'background:var(--dn)':''}"></i></div></div>`:'')
+ +(+S.set.goal>0?`<div class="c"><div class="row2"><span class="lbl">เป้าหมายออมเดือนนี้</span><b class="${f.n>=S.set.goal?'pos':''}">${money(Math.max(0,f.n))} / ${money(+S.set.goal)}</b></div><div class="bar2"><i style="width:${Math.min(100,Math.max(0,f.n)/S.set.goal*100)}%"></i></div></div>`:'')
+ +(cs.length?`<div class="sec"><h3>รายจ่ายตามหมวด</h3></div><div class="c">${cs.map(c=>`<div style="margin-bottom:12px"><div class="row2"><span>${c[0]}</span><span class="sub">${money(c[1])} · ${Math.round(c[1]/f.e*100)}%</span></div><div class="bar2"><i style="width:${c[1]/f.e*100}%"></i></div></div>`).join('')}</div>`:'')
+ +`<div class="sec"><h3>รายการ</h3><button class="lnk" onclick="openTx()">+ เพิ่ม</button></div><div class="c">${txList(l,wr)}</div>`}
+function openTx(id){TE=id?S.tx.find(t=>t.id===id):null;ft=TE?TE.type:'expense';txForm(TE?{a:TE.amt,d:TE.date,n:TE.note||'',c:TE.cat}:null)}
+function txForm(init){const d=document.getElementById('t_d'),k=init||{d:d?d.value:ymd(new Date()),a:d?document.getElementById('t_a').value:'',n:d?document.getElementById('t_n').value:''};
+ sheet(`<div class="grab"></div><h3>${TE?'แก้ไขรายการ':'เพิ่มรายการ'}</h3><div class="seg" style="margin-top:12px"><button class="${ft==='expense'?'on':''}" onclick="ft='expense';txForm()">รายจ่าย</button><button class="${ft==='income'?'on':''}" onclick="ft='income';txForm()">รายรับ</button></div>
+ <div class="fld"><label>จำนวนเงิน</label><div class="in"><input type="number" inputmode="decimal" id="t_a" value="${k.a}"><span>บาท</span></div></div><div class="two"><div class="fld"><label>หมวดหมู่</label><select id="t_c">${cats(ft).concat(k.c&&!cats(ft).includes(k.c)?[k.c]:[]).map(c=>`<option ${c===k.c?'selected':''}>${c}</option>`).join('')}</select></div><div class="fld"><label>วันที่</label><input type="date" id="t_d" value="${k.d}"></div></div>
+ <div class="fld"><label>บันทึกช่วยจำ</label><input id="t_n" value="${esc(k.n)}"></div><button class="btn p" onclick="saveTx()">บันทึก</button>${TE?`<button class="btn g" onclick="delTx('${TE.id}');closeSh()">ลบรายการ</button>`:''}`)}
+function saveTx(){const v=k=>document.getElementById(k).value,amt=parseFloat(v('t_a'));if(!(amt>0)||!v('t_d')){document.getElementById('t_a').focus();return}const o={type:ft,amt,cat:v('t_c'),date:v('t_d'),note:v('t_n')};if(TE)Object.assign(TE,o);else S.tx.push(Object.assign({id:uid()},o));TE=null;save();closeSh();render()}
+function delTx(id){S.tx=S.tx.filter(t=>t.id!==id);save();render()}
+const hint=()=>`ค่าแรงต่อชั่วโมง ${money(hourly())} · โอที ×${S.set.m1} = ${money(hourly()*S.set.m1)}/ชม.`;
+const F=(k,l,u,h='',t='number',st='')=>`<div class="fld"><label>${l}</label><div class="in"><input type="${t}" ${t==='number'?'inputmode="decimal"':''} ${st} value="${esc(S.set[k])}" onchange="setv('${k}',this.value,'${t}')"><span>${u}</span></div>${h?`<small>${h}</small>`:''}</div>`;
+function setv(k,v,t){S.set[k]=t==='number'?(parseFloat(v)||0):v;save();const h=document.getElementById('hr');if(h)h.textContent=hint()}
+function setTheme(t){S.set.theme=t;save();applyTheme();render()}
+function applyTheme(){const r=document.documentElement;if(S.set.theme==='auto')delete r.dataset.theme;else r.dataset.theme=S.set.theme}
+function vSet(){const s=S.set,H='step="0.5"';
+ return`<div class="c"><h4>ค่าแรง</h4>${F('wage','ค่าแรงต่อวัน','บาท')}${F('std','ชั่วโมงปกติต่อวัน','ชม.','ทำเกินจากนี้ = โอที','number',H)}${F('brk','เวลาพักมาตรฐาน','นาที','ใช้เมื่อไม่ได้กดเริ่มพัก/จบพัก')}${F('sso','หักประกันสังคม','%','0 = ไม่หัก (ปกติ 5% ของค่าแรง สูงสุด 750 บาท/เดือน)')}<small id="hr" style="display:block;margin-top:10px">${hint()}</small></div>
+ <div class="c"><h4>อัตราโอที</h4>${F('m1','โอที วันทำงานปกติ','เท่า','','number',H)}${F('m2','ค่าแรงวันหยุด (ชั่วโมงปกติ)','เท่า','','number',H)}${F('m3','โอที วันหยุด','เท่า','','number',H)}</div>
+ <div class="c"><h4>กะและความตรงต่อเวลา</h4>${F('shifts','เวลากะ = ค่ากะ','','เช่น 05:00=55, 06:00=0 (คั่นด้วยคอมมา) ระบบเลือกกะใกล้เวลาเข้างานให้เอง','text')}${F('grace','ผ่อนผันสาย','นาที')}${F('lm','ตัวคูณหักสาย','เท่า','1 = หักตามค่าแรงรายชั่วโมง','number',H)}${F('bonus','เบี้ยขยัน/สแกนตรงเวลา','บาท','0 = ไม่มี')}<div class="fld"><label>เบี้ยขยันจ่ายแบบ</label><div class="seg"><button class="${s.bmode==='d'?'on':''}" onclick="setv('bmode','d','text');render()">ต่อวัน (เข้าตรงเวลา)</button><button class="${s.bmode==='m'?'on':''}" onclick="setv('bmode','m','text');render()">ต่อเดือน (ไม่สายเลย)</button></div></div></div>
+ <div class="c"><h4>การเงิน</h4>${F('budget','งบรายจ่ายต่อเดือน','บาท','0 = ไม่ใช้งบ')}${F('goal','เป้าหมายออมต่อเดือน','บาท','0 = ไม่ตั้งเป้า')}<div class="fld"><label>หมวดรายจ่าย (คั่นด้วย ,)</label><input value="${esc(cats('expense').join(', '))}" onchange="S.set.ce=this.value;save()"></div><div class="fld"><label>หมวดรายรับอื่นๆ (คั่นด้วย ,)</label><input value="${esc(cats('income').join(', '))}" onchange="S.set.ci=this.value;save()"></div></div>
+ <div class="c"><h4>ธีม</h4><div class="seg" style="margin-top:10px">${[['auto','ตามเครื่อง'],['light','สว่าง'],['dark','มืด']].map(x=>`<button class="${s.theme===x[0]?'on':''}" onclick="setTheme('${x[0]}')">${x[1]}</button>`).join('')}</div></div>
+ <div class="c"><h4>ข้อมูล</h4><p class="sub" style="margin-top:4px">ข้อมูลเก็บในเบราว์เซอร์เครื่องนี้เท่านั้น ควรส่งออกสำรองไว้เป็นระยะ</p><div class="two"><button class="btn s" onclick="exp()">คัดลอกข้อมูลสำรอง</button><button class="btn s" onclick="impOpen()">นำเข้าข้อมูล</button></div><button class="btn s" onclick="expCsv()">คัดลอกตารางเวลา (CSV)</button><button class="btn g" onclick="ask('ลบข้อมูลทั้งหมด?',()=>{S=DEF();save();render()})">ล้างข้อมูลทั้งหมด</button></div>
+ <p class="sub" style="padding:0 4px 8px">เกณฑ์เตือนสุขภาพ (12 ชม./วัน, โอที 36 ชม./สัปดาห์, พักระหว่างกะ 11 ชม. ขึ้นไป, ทำติดกันไม่เกิน 6 วัน) เป็นแนวทางทั่วไป ไม่ใช่คำแนะนำทางกฎหมายหรือการแพทย์</p>`}
+function showText(t,x){sheet(`<div class="grab"></div><h3>${t}</h3><textarea id="tx" readonly>${esc(x)}</textarea><button class="btn p" onclick="copyTx()">คัดลอก</button><button class="btn s" onclick="dlTx()">ดาวน์โหลดเป็นไฟล์</button>`)}
+function dlTx(){const v=document.getElementById('tx').value,b=new Blob([v],{type:'text/plain'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='worklife-'+ymd(new Date())+(v[0]==='{'?'.json':'.csv');a.click()}
+function copyTx(){const t=document.getElementById('tx');t.select();try{navigator.clipboard.writeText(t.value)}catch(e){}try{document.execCommand('copy')}catch(e){}}
+function exp(){showText('ข้อมูลสำรอง – คัดลอกไปเก็บไว้ (เช่น โน้ตหรือแชตตัวเอง)',JSON.stringify(S))}
+function expCsv(){const r=[['วันที่','ประเภท','เข้า','เลิก','พัก','ทำงานสุทธิ(นาที)','โอที(นาที)','สาย(นาที)','ค่าแรง','ค่ากะ','ค่าโอที','หักสาย','เบี้ยขยัน','ปรับยอด','รวม','หมายเหตุ']];S.att.slice().sort((a,b)=>a.date.localeCompare(b.date)).forEach(e=>{const c=calc(e);if(c)r.push([e.date,LV[e.dt]||(e.dt==='h'?'ทำงานวันหยุด':'ปกติ'),e.in,e.out,e.brk||0,c.w,c.ot,c.lm,c.base,c.al,c.otp,c.ded,c.bon,c.ax||0,c.pay,e.note||''])});showText('ตารางเวลา (CSV) – วางลง Google Sheets / Excel',r.map(x=>x.join(',')).join('\n'))}
+function impOpen(){sheet(`<div class="grab"></div><h3>นำเข้าข้อมูล</h3><div class="sub">วางข้อมูลสำรองที่คัดลอกไว้ (จะแทนที่ข้อมูลปัจจุบัน)</div><textarea id="tx"></textarea><button class="btn s" onclick="document.getElementById('fp').click()">เลือกไฟล์สำรอง</button><input type="file" id="fp" hidden accept=".json,.txt" onchange="const f=this.files[0];if(f){const r=new FileReader();r.onload=()=>{document.getElementById('tx').value=r.result};r.readAsText(f)}"><button class="btn p" onclick="imp()">นำเข้า</button>`)}
+function openMadj(id){const x=S.adj.find(y=>y.id===id)||{m:mon,n:'',s:1,v:''};sheet(`<div class="grab"></div><h3>${id?'แก้ไขรายการ':'เพิ่มรายการบวก/หักประจำเดือน'}</h3><div class="sub" style="margin-top:4px">${monLabel()} · เช่น โบนัส, เบี้ยเลี้ยง, หักเงินกู้, ค่าชุดยูนิฟอร์ม</div><div class="fld"><label>ชื่อรายการ</label><input id="m_n" value="${esc(x.n)}"></div><div class="two"><div class="fld"><label>ประเภท</label><select id="m_s"><option value="1" ${x.s>0?'selected':''}>＋ เพิ่ม</option><option value="-1" ${x.s<0?'selected':''}>− หัก</option></select></div><div class="fld"><label>จำนวนเงิน</label><div class="in"><input type="number" inputmode="decimal" id="m_v" value="${x.v}"><span>บาท</span></div></div></div><button class="btn p" onclick="saveMadj('${id||''}')">บันทึก</button>${id?`<button class="btn g" onclick="S.adj=S.adj.filter(y=>y.id!=='${id}');save();closeSh();render()">ลบรายการ</button>`:''}`)}
+function saveMadj(id){const v=k=>document.getElementById(k).value,o={n:v('m_n'),s:+v('m_s'),v:parseFloat(v('m_v'))||0};if(!o.v)return;if(id)Object.assign(S.adj.find(y=>y.id===id),o);else S.adj.push(Object.assign({id:uid(),m:mon},o));save();closeSh();render()}
+function imp(){const t=document.getElementById('tx');try{const j=JSON.parse(t.value);S={set:Object.assign(DEF().set,j.set),att:j.att||[],tx:j.tx||[],adj:j.adj||[]};save();applyTheme();closeSh();render()}catch(e){t.value='ข้อมูลไม่ถูกต้อง ลองคัดลอกใหม่อีกครั้ง'}}
+function ask(m,fn){window._f=fn;sheet(`<div class="grab"></div><h3>${m}</h3><div class="two"><button class="btn s" onclick="closeSh()">ยกเลิก</button><button class="btn d" onclick="closeSh();_f()">ยืนยัน</button></div>`)}
+function sheet(h){document.getElementById('sh').innerHTML=h;document.getElementById('ov').classList.add('show')}
+function closeSh(){document.getElementById('ov').classList.remove('show');document.getElementById('sh').innerHTML=''}
+applyTheme();mon=ym(new Date());render();
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+setInterval(()=>{const e=todayE();if(tab==='home'&&e&&!e.out&&!document.getElementById('ov').classList.contains('show'))render()},30000);
+</script>
+</body>
+</html>
