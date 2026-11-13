@@ -80,19 +80,29 @@ nav button{flex:1;height:56px;font-size:13.5px;font-weight:500;color:var(--mu);p
 nav .on{color:var(--tx);font-weight:700}nav .on::before{content:'';position:absolute;left:18%;right:18%;top:-1px;height:3px;background:var(--tx)}
 #ov{position:fixed;inset:0;background:rgba(10,9,7,.55);display:none;align-items:flex-end;justify-content:center;z-index:10}#ov.show{display:flex}
 #sh{background:var(--s);width:100%;max-width:520px;border-top:3px solid var(--tx);border-radius:10px 10px 0 0;padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px));max-height:92vh;overflow:auto}.grab{display:none}
+.hd{position:relative}.hq{position:absolute;right:0;top:26px;width:38px;height:38px;border:1px solid var(--tx);border-radius:50%;font-weight:700;font-family:var(--mo);font-size:16px}
+.gd{border-top:1px solid var(--ln);padding:12px 0}.gd>summary{font-size:15px}.gb{font-size:14px;line-height:1.8}.gb b{font-weight:700}.gb p+p{margin-top:8px}.gb .eg{margin-top:8px;padding:8px 10px;border:1px dashed var(--mu);border-radius:4px;font-family:var(--mo);font-size:12.5px;line-height:1.7}
+#ib{display:none;position:fixed;left:12px;right:12px;bottom:calc(66px + env(safe-area-inset-bottom,0px));max-width:496px;margin:0 auto;background:var(--tx);color:var(--bg);border-radius:6px;padding:12px 14px;z-index:6;font-size:14px;line-height:1.5;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+#ib .r{display:flex;gap:8px;margin-top:10px}#ib button{flex:1;height:40px;border-radius:4px;font-weight:600;font-size:14px}#ib .y{background:var(--or);color:#fff}#ib .n{border:1px solid currentColor}
 </style>
 </head>
 <body>
 <main id="app"></main>
 <nav><div id="nav"></div></nav>
+<div id="ib"></div>
 <div id="ov" onclick="if(event.target===this)closeSh()"><div id="sh"></div></div>
 <script>
 const K='worklife.v1';
 const DEF=()=>({set:{wage:400,std:8,m1:1.5,m2:2,m3:3,brk:60,shifts:'05:00=55, 06:00=0',grace:0,lm:1,bonus:0,bmode:'d',sso:0,goal:0,budget:0,theme:'auto'},att:[],tx:[],adj:[]});
 const CATS={expense:['อาหาร','เดินทาง','บิล/ที่พัก','ช้อปปิ้ง','สุขภาพ','บันเทิง','อื่นๆ'],income:['งานเสริม','เงินคืน','อื่นๆ']};
+// ตั้งค่าคลาวด์ (Firebase) — ใส่ค่าสองบรรทัดนี้ครั้งเดียว ผู้ใช้คนอื่นจะสมัครใช้ได้ทันที (ดู cloud-setup.md)
+const CLOUD={apiKey:'',projectId:''};
+const SK='worklife.cloud';
+let SY=(()=>{try{return JSON.parse(localStorage.getItem(SK))||{}}catch(e){return{}}})(),syT=null,syBusy=false;
+const sySave=()=>{try{localStorage.setItem(SK,JSON.stringify({apiKey:SY.apiKey,projectId:SY.projectId,s:SY.s}))}catch(e){}};
 let S=load(),tab='home',mon='',ft='expense',dOpen=true,AJ=[],TE=null;
-function load(){try{const j=JSON.parse(localStorage.getItem(K))||{},d=DEF(),s=Object.assign(d.set,j.set);if(!/=/.test(s.shifts))s.shifts=DEF().set.shifts;return{set:s,att:j.att||[],tx:j.tx||[],adj:j.adj||[]}}catch(e){return DEF()}}
-function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
+function load(){try{const j=JSON.parse(localStorage.getItem(K))||{},d=DEF(),s=Object.assign(d.set,j.set);if(!/=/.test(s.shifts))s.shifts=DEF().set.shifts;return{set:s,att:j.att||[],tx:j.tx||[],adj:j.adj||[],ts:j.ts||0}}catch(e){return DEF()}}
+function save(){S.ts=Date.now();try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}if(SY.s){clearTimeout(syT);syT=setTimeout(syPush,1500)}}
 const pad=n=>String(n).padStart(2,'0');
 const ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
 function ym(d){return ymd(d).slice(0,7)}
@@ -140,7 +150,7 @@ function go(t){tab=t;render();window.scrollTo(0,0)}
 function render(){
  document.getElementById('nav').innerHTML=TABS.map(t=>`<button class="${tab===t[0]?'on':''}" onclick="go('${t[0]}')">${t[1]}</button>`).join('');
  const T={home:'วันนี้',time:'เวลางาน',money:'การเงิน',set:'ตั้งค่า'}[tab],d=new Date().toLocaleDateString('th-TH',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
- document.getElementById('app').innerHTML=`<div class="hd"><small>WorkLife · ${d}</small><h1>${T}</h1></div>`+({home:vHome,time:vTime,money:vMoney,set:vSet})[tab]();
+ document.getElementById('app').innerHTML=`<div class="hd"><small>WorkLife · ${d}</small><h1>${T}</h1><button class="hq" onclick="guide()" aria-label="คู่มือการใช้งาน">?</button></div>`+({home:vHome,time:vTime,money:vMoney,set:vSet})[tab]();
 }
 const hmm=m=>pad(Math.floor(m/60))+':'+pad(Math.round(m)%60);
 function hero(){const e=todayE(),n=new Date(),k=!e?0:isLv(e)?4:e.out?3:e.bs?2:1,L=['ยังไม่เข้างาน','กำลังทำงาน','กำลังพัก','เลิกงานแล้ว',LV[e&&e.dt]||''][k],CC=['','ac','ot','up','ot'][k];
@@ -209,13 +219,89 @@ function setv(k,v,t){S.set[k]=t==='number'?(parseFloat(v)||0):v;save();const h=d
 function setTheme(t){S.set.theme=t;save();applyTheme();render()}
 function applyTheme(){const r=document.documentElement;if(S.set.theme==='auto')delete r.dataset.theme;else r.dataset.theme=S.set.theme}
 function vSet(){const s=S.set,H='step="0.5"';
- return`<div class="c"><h4>ค่าแรง</h4>${F('wage','ค่าแรงต่อวัน','บาท')}${F('std','ชั่วโมงปกติต่อวัน','ชม.','ทำเกินจากนี้ = โอที','number',H)}${F('brk','เวลาพักมาตรฐาน','นาที','ใช้เมื่อไม่ได้กดเริ่มพัก/จบพัก')}${F('sso','หักประกันสังคม','%','0 = ไม่หัก (ปกติ 5% ของค่าแรง สูงสุด 750 บาท/เดือน)')}<small id="hr" style="display:block;margin-top:10px">${hint()}</small></div>
+ return`${helpCard()}<div class="c"><h4>ค่าแรง</h4>${F('wage','ค่าแรงต่อวัน','บาท')}${F('std','ชั่วโมงปกติต่อวัน','ชม.','ทำเกินจากนี้ = โอที','number',H)}${F('brk','เวลาพักมาตรฐาน','นาที','ใช้เมื่อไม่ได้กดเริ่มพัก/จบพัก')}${F('sso','หักประกันสังคม','%','0 = ไม่หัก (ปกติ 5% ของค่าแรง สูงสุด 750 บาท/เดือน)')}<small id="hr" style="display:block;margin-top:10px">${hint()}</small></div>
  <div class="c"><h4>อัตราโอที</h4>${F('m1','โอที วันทำงานปกติ','เท่า','','number',H)}${F('m2','ค่าแรงวันหยุด (ชั่วโมงปกติ)','เท่า','','number',H)}${F('m3','โอที วันหยุด','เท่า','','number',H)}</div>
  <div class="c"><h4>กะและความตรงต่อเวลา</h4>${F('shifts','เวลากะ = ค่ากะ','','เช่น 05:00=55, 06:00=0 (คั่นด้วยคอมมา) ระบบเลือกกะใกล้เวลาเข้างานให้เอง','text')}${F('grace','ผ่อนผันสาย','นาที')}${F('lm','ตัวคูณหักสาย','เท่า','1 = หักตามค่าแรงรายชั่วโมง','number',H)}${F('bonus','เบี้ยขยัน/สแกนตรงเวลา','บาท','0 = ไม่มี')}<div class="fld"><label>เบี้ยขยันจ่ายแบบ</label><div class="seg"><button class="${s.bmode==='d'?'on':''}" onclick="setv('bmode','d','text');render()">ต่อวัน (เข้าตรงเวลา)</button><button class="${s.bmode==='m'?'on':''}" onclick="setv('bmode','m','text');render()">ต่อเดือน (ไม่สายเลย)</button></div></div></div>
  <div class="c"><h4>การเงิน</h4>${F('budget','งบรายจ่ายต่อเดือน','บาท','0 = ไม่ใช้งบ')}${F('goal','เป้าหมายออมต่อเดือน','บาท','0 = ไม่ตั้งเป้า')}<div class="fld"><label>หมวดรายจ่าย (คั่นด้วย ,)</label><input value="${esc(cats('expense').join(', '))}" onchange="S.set.ce=this.value;save()"></div><div class="fld"><label>หมวดรายรับอื่นๆ (คั่นด้วย ,)</label><input value="${esc(cats('income').join(', '))}" onchange="S.set.ci=this.value;save()"></div></div>
  <div class="c"><h4>ธีม</h4><div class="seg" style="margin-top:10px">${[['auto','ตามเครื่อง'],['light','สว่าง'],['dark','มืด']].map(x=>`<button class="${s.theme===x[0]?'on':''}" onclick="setTheme('${x[0]}')">${x[1]}</button>`).join('')}</div></div>
- <div class="c"><h4>ข้อมูล</h4><p class="sub" style="margin-top:4px">ข้อมูลเก็บในเบราว์เซอร์เครื่องนี้เท่านั้น ควรส่งออกสำรองไว้เป็นระยะ</p><div class="two"><button class="btn s" onclick="exp()">คัดลอกข้อมูลสำรอง</button><button class="btn s" onclick="impOpen()">นำเข้าข้อมูล</button></div><button class="btn s" onclick="expCsv()">คัดลอกตารางเวลา (CSV)</button><button class="btn g" onclick="ask('ลบข้อมูลทั้งหมด?',()=>{S=DEF();save();render()})">ล้างข้อมูลทั้งหมด</button></div>
+ ${syCard()}<div class="c"><h4>ข้อมูล</h4><p class="sub" style="margin-top:4px">ข้อมูลเก็บในเบราว์เซอร์เครื่องนี้เท่านั้น ควรส่งออกสำรองไว้เป็นระยะ</p><div class="two"><button class="btn s" onclick="exp()">คัดลอกข้อมูลสำรอง</button><button class="btn s" onclick="impOpen()">นำเข้าข้อมูล</button></div><button class="btn s" onclick="expCsv()">คัดลอกตารางเวลา (CSV)</button><button class="btn g" onclick="ask('ลบข้อมูลทั้งหมด?',()=>{S=DEF();save();render()})">ล้างข้อมูลทั้งหมด</button></div>
  <p class="sub" style="padding:0 4px 8px">เกณฑ์เตือนสุขภาพ (12 ชม./วัน, โอที 36 ชม./สัปดาห์, พักระหว่างกะ 11 ชม. ขึ้นไป, ทำติดกันไม่เกิน 6 วัน) เป็นแนวทางทั่วไป ไม่ใช่คำแนะนำทางกฎหมายหรือการแพทย์</p>`}
+const syCfg=()=>({k:(CLOUD.apiKey||SY.apiKey||'').trim(),p:(CLOUD.projectId||SY.projectId||'').trim()});
+function syState(m){SY.msg=m;const el=document.getElementById('sy');if(el)el.textContent=m}
+const thErr=e=>{const m=String(e&&e.message||e);return /EMAIL_NOT_FOUND|INVALID_PASSWORD|INVALID_LOGIN_CREDENTIALS/.test(m)?'อีเมลหรือรหัสผ่านไม่ถูกต้อง':/EMAIL_EXISTS/.test(m)?'อีเมลนี้สมัครแล้ว ให้กดเข้าสู่ระบบ':/WEAK_PASSWORD/.test(m)?'รหัสผ่านสั้นเกินไป (อย่างน้อย 6 ตัว)':/INVALID_EMAIL|MISSING_EMAIL/.test(m)?'รูปแบบอีเมลไม่ถูกต้อง':/TOO_MANY_ATTEMPTS/.test(m)?'ลองหลายครั้งเกินไป รอสักครู่แล้วลองใหม่':/API key not valid|API_KEY_INVALID/i.test(m)?'API key ไม่ถูกต้อง':/PERMISSION_DENIED|Missing or insufficient/i.test(m)?'ไม่มีสิทธิ์เข้าถึง ตรวจ Firestore Rules ตามคู่มือ':/does not exist|has not been used|NOT_FOUND/i.test(m)?'ยังไม่ได้สร้างฐานข้อมูล Firestore ตามคู่มือ':/Failed to fetch|NetworkError|Load failed/i.test(m)?'เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ ตรวจสอบอินเทอร์เน็ต':m};
+async function fbAuth(ep,body){const r=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:'+ep+'?key='+encodeURIComponent(syCfg().k),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error((j.error&&j.error.message)||'HTTP '+r.status);return j}
+const setSess=j=>{SY.s={id:j.idToken,refresh:j.refreshToken,exp:Date.now()+(+j.expiresIn||3600)*1000,uid:j.localId||(SY.s&&SY.s.uid),email:j.email||(SY.s&&SY.s.email)};sySave()};
+async function syEnsure(){if(!SY.s)throw new Error('ยังไม่ได้เข้าสู่ระบบ');
+ if(Date.now()>SY.s.exp-120000){const r=await fetch('https://securetoken.googleapis.com/v1/token?key='+encodeURIComponent(syCfg().k),{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'grant_type=refresh_token&refresh_token='+encodeURIComponent(SY.s.refresh)});const j=await r.json().catch(()=>({}));
+  if(!r.ok){SY.s=null;sySave();throw new Error('เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่')}SY.s={id:j.id_token,refresh:j.refresh_token,exp:Date.now()+(+j.expires_in||3600)*1000,uid:j.user_id,email:SY.s.email};sySave()}return SY.s}
+async function fsReq(method,body){const s=await syEnsure(),r=await fetch('https://firestore.googleapis.com/v1/projects/'+encodeURIComponent(syCfg().p)+'/databases/(default)/documents/users/'+encodeURIComponent(s.uid),{method,headers:{'Authorization':'Bearer '+s.id,'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
+ const j=await r.json().catch(()=>({}));
+ if(r.status===404&&method==='GET'){const m=(j.error&&j.error.message)||'';if(/database/i.test(m)&&/not exist/i.test(m))throw new Error(m);return null}
+ if(!r.ok)throw new Error((j.error&&(j.error.status+' '+j.error.message))||'HTTP '+r.status);return j}
+async function syRow(){const d=await fsReq('GET');if(!d||!d.fields||!d.fields.data)return null;return JSON.parse(d.fields.data.stringValue)}
+async function syWrite(){if(!S.ts)S.ts=Date.now();await fsReq('PATCH',{fields:{data:{stringValue:JSON.stringify(S)},ts:{integerValue:String(S.ts)},email:{stringValue:(SY.s&&SY.s.email)||''}}})}
+async function syPull(){if(!SY.s||syBusy)return;syBusy=true;
+ try{syState('กำลังดึงข้อมูล…');const rem=await syRow();
+  if(rem&&(rem.ts||0)>(S.ts||0)){S={set:Object.assign(DEF().set,rem.set),att:rem.att||[],tx:rem.tx||[],adj:rem.adj||[],ts:rem.ts};try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}applyTheme();render();syState('ซิงก์แล้ว · ดึงข้อมูลล่าสุดมาแล้ว')}
+  else if(!rem||(S.ts||0)>(rem.ts||0)){syBusy=false;await syPush();return}
+  else syState('ซิงก์แล้ว · ข้อมูลตรงกับคลาวด์')}catch(e){syState('ซิงก์ไม่สำเร็จ: '+thErr(e)+' (ข้อมูลยังอยู่ในเครื่อง)')}syBusy=false}
+async function syPush(){if(!SY.s)return;try{syState('กำลังบันทึกขึ้นคลาวด์…');await syWrite();syState('ซิงก์แล้ว '+new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'}))}catch(e){syState('ซิงก์ไม่สำเร็จ: '+thErr(e)+' (ข้อมูลยังอยู่ในเครื่อง)')}}
+async function syAuth(mode){const em=document.getElementById('sy_e').value.trim(),pw=document.getElementById('sy_p').value;if(!em||pw.length<6){syState('กรอกอีเมลและรหัสผ่าน (อย่างน้อย 6 ตัว)');return}
+ syState(mode==='up'?'กำลังสมัคร…':'กำลังเข้าสู่ระบบ…');
+ try{setSess(await fbAuth(mode==='up'?'signUp':'signInWithPassword',{email:em,password:pw,returnSecureToken:true}));await syFirst()}catch(e){syState(thErr(e))}}
+async function syForgot(){const em=document.getElementById('sy_e').value.trim();if(!em){syState('กรอกอีเมลก่อน แล้วกด "ลืมรหัสผ่าน"');return}try{await fbAuth('sendOobCode',{requestType:'PASSWORD_RESET',email:em});syState('ส่งลิงก์ตั้งรหัสผ่านใหม่ไปที่อีเมลแล้ว (เช็กกล่องสแปมด้วย)')}catch(e){syState(thErr(e))}}
+async function syFirst(){try{const rem=await syRow();window._rem=rem||{};
+  if(!rem){await syPush();render();return}
+  if(!(S.att.length||S.tx.length)){syAdopt();return}
+  sheet(`<h3>พบข้อมูลในบัญชีนี้แล้ว</h3><p class="sub" style="margin-top:6px;line-height:1.7">บนคลาวด์: ${(_rem.att||[]).length} รายการเวลา · ${(_rem.tx||[]).length} รายการเงิน<br>เครื่องนี้: ${S.att.length} รายการเวลา · ${S.tx.length} รายการเงิน</p><button class="btn p" onclick="syAdopt()">ใช้ข้อมูลบนคลาวด์ (แทนที่เครื่องนี้)</button><button class="btn s" onclick="syKeep()">ใช้ข้อมูลเครื่องนี้ (ทับคลาวด์)</button>`)}
+ catch(e){syState(thErr(e));render()}}
+function syAdopt(){const r=window._rem||{};S={set:Object.assign(DEF().set,r.set),att:r.att||[],tx:r.tx||[],adj:r.adj||[],ts:r.ts||Date.now()};try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}applyTheme();closeSh();syState('เข้าสู่ระบบแล้ว · ดึงข้อมูลจากคลาวด์แล้ว');render()}
+function syKeep(){closeSh();save();syState('เข้าสู่ระบบแล้ว · อัปโหลดข้อมูลเครื่องนี้แล้ว');render()}
+function syOut(){SY.s=null;sySave();SY.msg='';render()}
+function syCfgSave(){SY.apiKey=document.getElementById('sy_ak').value.trim();SY.projectId=document.getElementById('sy_pid').value.trim();sySave();render()}
+const syCard=()=>{const c=syCfg();
+ if(!c.k||!c.p)return`<div class="c"><h4>บัญชีและซิงก์ข้อมูล</h4><p class="sub" style="margin-top:4px;line-height:1.7">ตอนนี้เก็บข้อมูลในเครื่องนี้อย่างเดียว ถ้าจะซิงก์หลายเครื่อง/ให้คนอื่นสมัครใช้ ทำตามคู่มือ <b>cloud-setup.md</b> แล้วใส่ค่าสองช่องนี้ (หรือฝังไว้ในไฟล์ index.html ที่ตัวแปร <b>CLOUD</b> เพื่อให้ทุกคนใช้ได้เลยโดยไม่ต้องกรอก)</p><div class="fld"><label>Firebase API key</label><input id="sy_ak" autocomplete="off" placeholder="AIza..."></div><div class="fld"><label>Firebase Project ID</label><input id="sy_pid" autocomplete="off" placeholder="my-worklife"></div><button class="btn p" onclick="syCfgSave()">บันทึกการตั้งค่า</button></div>`;
+ if(SY.s)return`<div class="c"><h4>บัญชีและซิงก์ข้อมูล</h4><div style="margin-top:8px"><span class="tag up">● เข้าสู่ระบบแล้ว</span></div><div class="mo" style="margin-top:8px;font-size:14px">${esc(SY.s.email||'')}</div><p class="sub" style="margin-top:6px">ข้อมูลบันทึกขึ้นคลาวด์อัตโนมัติทุกครั้งที่แก้ไข และดึงล่าสุดตอนเปิดแอป ข้อมูลของแต่ละบัญชีแยกจากกัน</p><div class="sub mo" id="sy" style="margin-top:8px">${esc(SY.msg||'')}</div><div class="two"><button class="btn s" onclick="syPull()">ซิงก์ตอนนี้</button><button class="btn g" onclick="syOut()">ออกจากระบบ</button></div></div>`;
+ return`<div class="c"><h4>เข้าสู่ระบบเพื่อซิงก์ข้อมูล</h4><p class="sub" style="margin-top:4px">สมัครด้วยอีเมลและรหัสผ่านครั้งเดียว ใช้ได้ทุกเครื่อง ข้อมูลไม่หายแม้ล้างเบราว์เซอร์</p><div class="fld"><label>อีเมล</label><input type="email" id="sy_e" autocomplete="email" inputmode="email"></div><div class="fld"><label>รหัสผ่าน (อย่างน้อย 6 ตัว)</label><input type="password" id="sy_p" autocomplete="current-password"></div><div class="sub mo" id="sy" style="margin-top:8px">${esc(SY.msg||'')}</div><div class="two"><button class="btn p" onclick="syAuth('in')">เข้าสู่ระบบ</button><button class="btn s" onclick="syAuth('up')">สมัครใช้งาน</button></div><button class="lnk" onclick="syForgot()">ลืมรหัสผ่าน?</button></div>`};
+let IP=null;
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();IP=e;setTimeout(instBanner,800)});
+addEventListener('appinstalled',()=>{IP=null;const b=document.getElementById('ib');if(b)b.style.display='none'});
+const UA=(navigator.userAgent)||'';
+const isStd=()=>(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+const isIOS=()=>/iPad|iPhone|iPod/.test(UA)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+const isInApp=()=>/Line\/|FBAN|FBAV|Instagram|MicroMessenger|TikTok|Messenger|Snapchat/i.test(UA);
+const isMob=()=>/Android|iPhone|iPad|iPod|Mobile/i.test(UA)||isIOS();
+function seen(){try{localStorage.setItem('worklife.seen','1')}catch(e){}}
+function instInit(){
+ try{if(!localStorage.getItem('worklife.seen')&&!S.att.length&&!S.tx.length)setTimeout(()=>guide(true),700)}catch(e){}
+ setTimeout(instBanner,2500)}
+function instBanner(){const b=document.getElementById('ib');if(!b||isStd())return;
+ if(document.getElementById('ov').classList.contains('show')){setTimeout(instBanner,4000);return}
+ let t=0;try{t=+localStorage.getItem('worklife.ib')||0}catch(e){}if(Date.now()-t<6048e5)return;
+ if(!IP&&!isMob())return;
+ const direct=IP&&!isInApp();
+ b.innerHTML=`<div><b>${isInApp()?'เปิดลิงก์ในเบราว์เซอร์ (Chrome/Safari) ก่อน จึงจะติดตั้งเป็นแอปได้':'ติดตั้ง WorkLife ลงหน้าจอ เปิดใช้ง่ายเหมือนแอปทั่วไป ใช้ออฟไลน์ได้'}</b></div><div class="r"><button class="n" onclick="instLater()">ไว้ทีหลัง</button><button class="y" onclick="${direct?'instGo()':'instHelp()'}">${direct?'ติดตั้ง':'วิธีติดตั้ง'}</button></div>`;b.style.display='block'}
+function instLater(){try{localStorage.setItem('worklife.ib',String(Date.now()))}catch(e){}document.getElementById('ib').style.display='none'}
+async function instGo(){if(!IP){instHelp();return}IP.prompt();try{await IP.userChoice}catch(e){}IP=null;document.getElementById('ib').style.display='none'}
+function instHelp(){const b=document.getElementById('ib');if(b)b.style.display='none';
+ const cp=`<button class="btn s" onclick="try{navigator.clipboard.writeText(location.href.split('#')[0])}catch(e){}this.textContent='คัดลอกลิงก์แล้ว'">คัดลอกลิงก์นี้</button>`;let body;
+ if(isInApp())body=`<div class="gb"><p><b>คุณเปิดลิงก์ผ่านแอปแชต/โซเชียล</b> (LINE, Facebook, IG ฯลฯ) ซึ่งติดตั้งเป็นแอปโดยตรงไม่ได้</p><p>1. แตะ <b>⋮</b> หรือ <b>⋯</b> ที่มุมขวาบน<br>2. เลือก <b>เปิดในเบราว์เซอร์</b> (Chrome หรือ Safari)<br>3. เมื่อเปิดในเบราว์เซอร์แล้ว กด "วิธีติดตั้ง" อีกครั้ง</p></div>${cp}`;
+ else if(isIOS())body=`<div class="gb"><p>1. เปิดลิงก์นี้ใน <b>Safari</b> (ถ้าอยู่ในแอปอื่น ให้คัดลอกลิงก์ไปวางใน Safari)<br>2. แตะปุ่ม <b>แชร์</b> (สี่เหลี่ยมมีลูกศรชี้ขึ้น) ที่แถบด้านล่าง<br>3. เลื่อนลงแล้วเลือก <b>เพิ่มลงในหน้าจอโฮม</b><br>4. แตะ <b>เพิ่ม</b> ที่มุมขวาบน จะมีไอคอน WorkLife บนหน้าจอ</p></div>${cp}`;
+ else body=`<div class="gb"><p>1. เปิดลิงก์นี้ด้วย <b>Chrome</b><br>2. แตะ <b>⋮</b> ที่มุมขวาบน<br>3. เลือก <b>ติดตั้งแอป</b> หรือ <b>เพิ่มลงในหน้าจอหลัก</b><br>4. แตะ <b>ติดตั้ง</b> จะมีไอคอน WorkLife บนหน้าจอ</p><p class="sub">บนคอมพิวเตอร์: คลิกไอคอนติดตั้งที่ท้ายแถบที่อยู่ของ Chrome</p></div>${cp}`;
+ sheet(`<div class="grab"></div><h3>ติดตั้งแอปลงหน้าจอ</h3><div style="margin-top:8px">${body}</div>${IP&&!isInApp()?'<button class="btn clk" onclick="closeSh();instGo()">ติดตั้งตอนนี้</button>':''}<button class="btn p" onclick="closeSh()">เข้าใจแล้ว</button>`)}
+const helpCard=()=>`<div class="c"><h4>คู่มือและติดตั้งแอป</h4><div class="two"><button class="btn s" onclick="guide()">คู่มือการใช้งาน</button>${isStd()?'':'<button class="btn s" onclick="instHelp()">วิธีติดตั้งแอป</button>'}</div></div>`;
+const GD=[
+['เริ่มใช้ใน 3 ขั้น',`<p>1. ไปที่แท็บ <b>ตั้งค่า</b> ใส่ <b>ค่าแรงต่อวัน</b> ชั่วโมงปกติต่อวัน และ <b>เวลากะ=ค่ากะ</b> (เช่น 05:00=55)</p><p>2. ที่แท็บ <b>วันนี้</b> กด <b>เข้างานตอนนี้</b> ตอนเข้า และ <b>เลิกงาน</b> ตอนเลิก</p><p>3. ดูยอดวันนี้ที่การ์ดบนสุด ดูยอดทั้งเดือนที่แท็บ <b>เวลางาน</b></p>`],
+['เข้างาน เลิกงาน และพัก',`<p><b>เข้างานตอนนี้</b> บันทึกเวลาปัจจุบัน ระบบเลือกกะที่ใกล้เวลาเข้าที่สุดให้เอง (ใช้คิดค่ากะและมาสาย)</p><p><b>เริ่มพัก / จบพัก</b> นับเวลาพักจริง ถ้าไม่กด ระบบใช้เวลาพักมาตรฐานที่ตั้งไว้</p><p><b>เลิกงาน</b> จะเปิดหน้าให้ตรวจเวลา พัก และดูยอดก่อนกดบันทึก</p>`],
+['ลืมกด? แก้ไขย้อนหลัง',`<p>ไปแท็บ <b>เวลางาน</b> แตะวันที่ในปฏิทินเพื่อเพิ่มหรือแก้ไข ลบได้ในหน้าเดียวกัน</p><p><b>ป้ายดำ</b> = ชั่วโมงปกติ · <b>ป้ายส้ม (+)</b> = ชั่วโมงโอที · <b>ลายทาง</b> = ลา/หยุด · <b>จุดแดง</b> = วันหยุด</p>`],
+['ยอดเงินคิดยังไง',`<p>รวมวันนี้ = <b>ค่าแรง</b> + <b>ค่ากะ</b> + <b>โอที</b> − <b>หักสาย</b> + <b>เบี้ยขยัน</b> ± ปรับยอด</p><p>โอที = ชั่วโมงที่ทำเกินชั่วโมงปกติ × ค่าแรงต่อชั่วโมง × ตัวคูณ ค่าหักสายคิดตามนาทีที่เข้าช้ากว่ากะ (เกินเวลาผ่อนผัน)</p><div class="eg">ตัวอย่าง: ค่าแรง 400 ต่อ 8 ชม. = 50/ชม. โอที ×1.5 = 75/ชม.<br>เข้า 05:00 เลิก 16:00 พัก 60 น. → ทำสุทธิ 10 ชม. โอที 2 ชม. = 150<br>400 + ค่ากะ 55 + 150 = 605 บาท</div><p>ทุกบรรทัดแสดงสูตรอยู่ใต้การ์ด <b>วิธีคิดเงินวันนี้</b> ถ้ายอดไม่ตรง ให้เช็กค่าที่ตั้งไว้ในหน้าตั้งค่าก่อน</p>`],
+['ปรับยอด บวก/หัก เองได้ทุกอย่าง',`<p><b>รายวัน:</b> แตะวันนั้น → ช่อง "ปรับยอด" → ＋ เพิ่ม หรือ − หัก ใส่ชื่อและจำนวนเงิน (เช่น ค่าข้าว +60, หักขาด −30)</p><p><b>รายเดือน:</b> แท็บเวลางาน → "+ เพิ่มรายการบวก/หักประจำเดือน" เช่น โบนัส หักเงินกู้ แตะรายการเพื่อแก้หรือลบ</p><p><b>ประกันสังคม:</b> ตั้ง % ในหน้าตั้งค่า (0 = ไม่หัก)</p>`],
+['ลา วันหยุด ทำงานวันหยุด',`<p>ในหน้าแก้ไขวัน เลือก <b>ประเภทวัน</b>:<br>• วันทำงานปกติ<br>• ทำงานวันหยุด (ค่าแรง/โอทีคูณตามที่ตั้ง)<br>• ลา – ได้ค่าแรง<br>• ลา/ขาด – ไม่ได้ค่าแรง<br>• วันหยุด (ไม่ทำงาน)</p>`],
+['รายรับ รายจ่าย งบ และเป้าหมายออม',`<p>แท็บ <b>การเงิน</b> กด "+ เพิ่ม" เพื่อบันทึกรายรับ/รายจ่าย แตะรายการเพื่อแก้ไขหรือลบ</p><p><b>รายได้จากงาน</b> ถูกนับเป็นรายรับให้อัตโนมัติ ไม่ต้องบันทึกซ้ำ</p><p>ตั้ง <b>งบรายจ่าย</b> และ <b>เป้าหมายออม</b> ต่อเดือนได้ที่หน้าตั้งค่า</p>`],
+['บัญชีและซิงก์ข้อมูล',`<p>ถ้าไม่สมัคร ข้อมูลอยู่ในเครื่องนี้เท่านั้น <b>ล้างข้อมูลเบราว์เซอร์แล้วจะหาย</b></p><p>สมัครที่ <b>ตั้งค่า → เข้าสู่ระบบเพื่อซิงก์ข้อมูล</b> (อีเมล + รหัสผ่าน) ข้อมูลจะตามคุณไปทุกเครื่อง บัญชีของใครของมัน ลืมรหัสผ่านกดลิงก์ "ลืมรหัสผ่าน?"</p>`],
+['สำรองและย้ายข้อมูล',`<p>ตั้งค่า → <b>ข้อมูล</b>: คัดลอกหรือดาวน์โหลดข้อมูลสำรอง และนำเข้ากลับมาได้ รวมถึงส่งออกตารางเวลาเป็น CSV เปิดใน Excel/Google Sheets</p>`],
+['ปัญหาที่พบบ่อย',`<p><b>ยอดไม่ตรง</b> → เช็กค่าแรง ตัวคูณโอที เบี้ยขยัน ค่ากะ ในหน้าตั้งค่า และดูสูตรใน "วิธีคิดเงินวันนี้"</p><p><b>กดผิด</b> → แตะวันนั้นในปฏิทินเพื่อแก้ไขหรือลบ</p><p><b>ติดตั้งไม่ได้ใน LINE/Facebook</b> → เปิดลิงก์ใน Chrome หรือ Safari ก่อน</p><p><b>เปลี่ยนสี สว่าง/มืด</b> → ตั้งค่า → ธีม</p>`]];
+function guide(first){sheet(`<div class="grab"></div><h3>${first?'ยินดีต้อนรับสู่ WorkLife':'คู่มือการใช้งาน'}</h3><p class="sub" style="margin-top:4px">แตะหัวข้อเพื่อเปิดอ่าน เปิดดูซ้ำได้จากปุ่ม ? มุมขวาบน</p><div style="margin-top:10px">${GD.map((g,i)=>`<details class="gd" ${i===0?'open':''}><summary>${g[0]}</summary><div class="gb">${g[1]}</div></details>`).join('')}</div><button class="btn p" onclick="seen();closeSh()">${first?'เริ่มใช้งาน':'ปิด'}</button>`)}
 function showText(t,x){sheet(`<div class="grab"></div><h3>${t}</h3><textarea id="tx" readonly>${esc(x)}</textarea><button class="btn p" onclick="copyTx()">คัดลอก</button><button class="btn s" onclick="dlTx()">ดาวน์โหลดเป็นไฟล์</button>`)}
 function dlTx(){const v=document.getElementById('tx').value,b=new Blob([v],{type:'text/plain'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='worklife-'+ymd(new Date())+(v[0]==='{'?'.json':'.csv');a.click()}
 function copyTx(){const t=document.getElementById('tx');t.select();try{navigator.clipboard.writeText(t.value)}catch(e){}try{document.execCommand('copy')}catch(e){}}
@@ -229,6 +315,11 @@ function ask(m,fn){window._f=fn;sheet(`<div class="grab"></div><h3>${m}</h3><div
 function sheet(h){document.getElementById('sh').innerHTML=h;document.getElementById('ov').classList.add('show')}
 function closeSh(){document.getElementById('ov').classList.remove('show');document.getElementById('sh').innerHTML=''}
 applyTheme();mon=ym(new Date());render();
+if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
+instInit();
+syPull();
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)syPull()});
+setInterval(()=>{const ae=document.activeElement,t=ae&&ae.tagName||'';if(SY.s&&!document.hidden&&!document.getElementById('ov').classList.contains('show')&&!/INPUT|SELECT|TEXTAREA/.test(t))syPull()},30000);
 if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 setInterval(()=>{const e=todayE();if(tab==='home'&&e&&!e.out&&!document.getElementById('ov').classList.contains('show'))render()},30000);
 </script>
