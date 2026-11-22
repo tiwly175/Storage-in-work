@@ -114,7 +114,7 @@ const APP_VERSION='3.0.0';
 const DEF=()=>({set:{wage:400,std:8,m1:1.5,m2:2,m3:3,brk:60,shifts:'05:00=55, 06:00=0',grace:0,lm:1,bonus:0,bmode:'d',sso:0,goal:0,budget:0,theme:'auto'},att:[],tx:[],adj:[]});
 const CATS={expense:['อาหาร','เดินทาง','บิล/ที่พัก','ช้อปปิ้ง','สุขภาพ','บันเทิง','อื่นๆ'],income:['งานเสริม','เงินคืน','อื่นๆ']};
 // ตั้งค่าคลาวด์ (Firebase) — ใส่ค่าสองบรรทัดนี้ครั้งเดียว ผู้ใช้คนอื่นจะสมัครใช้ได้ทันที (ดู cloud-setup.md)
-const CLOUD={apiKey:'',authDomain:'',projectId:'',appId:'',messagingSenderId:''};
+const CLOUD={apiKey:'AIzaSyDbLD6cGnNOysFDJoXARBYdKt1RBdSNHbA',authDomain:'storage-in-work.firebaseapp.com',projectId:'storage-in-work',appId:'1:896460521828:web:9706e7e4dd5050362dba71',messagingSenderId:'896460521828'};
 let FB=null,AUTH=null,DB=null,rtUnsub=null,activeUid=null,guestSnapshot=null;
 const SK='worklife.cloud';
 let SY=(()=>{try{return JSON.parse(localStorage.getItem(SK))||{}}catch(e){return{}}})(),syT=null,syBusy=false;
