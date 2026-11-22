@@ -197,6 +197,7 @@ const ICON={home:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1
 const TABS=[['home','วันนี้'],['time','เวลางาน'],['money','การเงิน'],['set','ตั้งค่า']];
 function go(t){tab=t;render();window.scrollTo(0,0)}
 function render(){
+ if(AUTH&&!authReady){document.getElementById('nav').innerHTML='';document.getElementById('app').innerHTML='<section style="min-height:65vh;display:grid;place-items:center;text-align:center;padding:28px"><div><div class="auth-mark">W</div><h2 style="margin:14px 0 6px">กำลังตรวจสอบบัญชี</h2><p class="sub">กำลังเรียกคืนสถานะการเข้าสู่ระบบของคุณ…</p></div></section>';return}
  if(AUTH&&authReady&&!authUser&&!guestMode){document.getElementById('nav').innerHTML='';document.getElementById('app').innerHTML=authPage();return}
  document.getElementById('nav').innerHTML=TABS.map(t=>`<button class="${tab===t[0]?'on':''}" onclick="go('${t[0]}')">${t[1]}</button>`).join('');
  const T={home:'วันนี้',time:'เวลางาน',money:'การเงิน',set:'ตั้งค่า'}[tab],d=new Date().toLocaleDateString('th-TH',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
@@ -381,8 +382,24 @@ function sheet(h){document.getElementById('sh').innerHTML=h;document.getElementB
 function closeSh(){document.getElementById('ov').classList.remove('show');document.getElementById('sh').innerHTML=''}
 applyTheme();mon=ym(new Date());wsInit();
 if(initFirebase()){
- authReady=true;AUTH.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});
- AUTH.onAuthStateChanged(async user=>{authUser=user||null;authReady=true;if(user){guestMode=false;try{await setSess(user);switchLocalAccount(user.uid);await syFirst()}catch(e){syState(thErr(e));render()}}else{stopRealtime();if(activeUid){activeUid=null;K='worklife.v1';S=load()}render()}});
+ authReady=false;
+ AUTH.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(()=>{
+  AUTH.onAuthStateChanged(async user=>{
+   authUser=user||null;
+   try{
+    if(user){
+     guestMode=false;
+     await setSess(user);
+     switchLocalAccount(user.uid);
+     await syFirst();
+    }else{
+     stopRealtime();
+     if(activeUid){activeUid=null;K='worklife.v1';S=load()}
+    }
+   }catch(e){syState(thErr(e))}
+   finally{authReady=true;render()}
+  },err=>{SY.msg=thErr(err);authReady=true;render()});
+ }).catch(e=>{SY.msg=thErr(e);authReady=true;render()});
 }else{authReady=false;SY.msg='กรุณาตั้งค่า Firebase Web App ตาม cloud-setup.md'}
 render();
 if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
