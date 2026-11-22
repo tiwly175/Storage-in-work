@@ -1,0 +1,7 @@
+WorkLife Professional 3.2.1
+- My Workspace changed to local-only image storage using IndexedDB.
+- Removed Firebase Storage SDK and all upload/download/delete calls.
+- Removed Cloud mode and Cloud sync controls from settings.
+- Preserved Firebase Authentication and Cloud Firestore app-data sync.
+- Background image applies to Login and app workspace on the same browser/device.
+- Updated PWA cache version.

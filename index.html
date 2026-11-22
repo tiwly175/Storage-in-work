@@ -22,6 +22,10 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);font-family:'IBM 
 *{box-sizing:border-box;margin:0}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{background:var(--bg);color:var(--tx);font-size:15px;line-height:1.55;max-width:860px;margin:0 auto;padding:0 20px 112px}
+body:before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(rgba(0,0,0,var(--ws-dim,.72)),rgba(0,0,0,var(--ws-dim,.72))),var(--ws-image,none);background-size:cover;background-position:center;background-repeat:no-repeat;filter:blur(var(--ws-blur,0px));transform:scale(1.03);display:none}
+body.has-workspace-bg:before{display:block}
+body.has-workspace-bg .c,body.has-workspace-bg .auth-panel{background:color-mix(in srgb,var(--s) calc(100% - var(--ws-glass,0%)),transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+body.has-workspace-bg{background:var(--bg)}
 .c{border-radius:12px;padding:18px;box-shadow:0 2px 10px rgba(25,22,16,.035);transition:border-color .18s ease,transform .18s ease}
 .btn{border-radius:9px;transition:transform .15s ease,opacity .15s ease}
 .btn:active{transform:scale(.985)}
@@ -98,6 +102,28 @@ nav .on{color:var(--tx);font-weight:700}nav .on::before{content:'';position:abso
 #ib{display:none;position:fixed;left:12px;right:12px;bottom:calc(66px + env(safe-area-inset-bottom,0px));max-width:496px;margin:0 auto;background:var(--tx);color:var(--bg);border-radius:6px;padding:12px 14px;z-index:6;font-size:14px;line-height:1.5;box-shadow:0 6px 24px rgba(0,0,0,.25)}
 .trend{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;height:150px;margin-top:18px}.trend-col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;min-width:0}.trend-bars{height:105px;width:100%;display:flex;align-items:flex-end;justify-content:center;gap:4px;border-bottom:1px solid var(--ln)}.trend-bars i{display:block;width:34%;min-height:2px;border-radius:4px 4px 0 0}.trend-bars .income{background:var(--up)}.trend-bars .expense{background:var(--or)}.trend-col small{font-size:11px}.trend-col b{font-size:10px;color:var(--mu);font-weight:500;white-space:nowrap}
 #ib .r{display:flex;gap:8px;margin-top:10px}#ib button{flex:1;height:40px;border-radius:4px;font-weight:600;font-size:14px}#ib .y{background:var(--or);color:#fff}#ib .n{border:1px solid currentColor}
+
+/* Dedicated sign-in experience */
+#auth-page{min-height:100svh;display:flex;align-items:center;justify-content:center;padding:34px 0 54px}
+.auth-wrap{width:100%;max-width:440px;margin:0 auto}
+.auth-brand{font-family:var(--mo);font-size:11px;letter-spacing:.16em;color:var(--mu);text-align:center}
+.auth-mark{width:58px;height:58px;border:1px solid var(--ln);border-radius:18px;display:grid;place-items:center;margin:0 auto 16px;font-family:var(--mo);font-size:27px;font-weight:700;background:var(--s)}
+.auth-title{text-align:center;font-size:29px;line-height:1.25;margin-top:8px}
+.auth-lead{text-align:center;color:var(--mu);font-size:14px;margin:8px auto 22px;max-width:330px}
+.auth-panel{background:var(--s);border:1px solid var(--ln);border-radius:16px;padding:22px;box-shadow:0 12px 40px rgba(0,0,0,.10)}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--ln);margin:-2px 0 18px}
+.auth-tabs button{height:44px;color:var(--mu);font-weight:600;border-bottom:2px solid transparent}
+.auth-tabs button.on{color:var(--tx);border-color:var(--or)}
+.auth-panel .fld{margin-top:13px}.auth-panel input{height:48px}
+.auth-main{width:100%;height:48px;margin-top:17px}
+.auth-google{width:100%;height:46px;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:10px}
+.auth-google b{font-family:Arial,sans-serif;font-size:18px;color:#4285f4}
+.auth-divider{display:flex;align-items:center;gap:12px;color:var(--mu);font-size:12px;margin:16px 0 4px}.auth-divider:before,.auth-divider:after{content:"";height:1px;background:var(--ln);flex:1}
+.auth-foot{text-align:center;color:var(--mu);font-size:12px;line-height:1.7;margin-top:16px}
+.auth-guest{display:block;width:100%;height:44px;margin-top:14px;border:1px solid var(--ln);border-radius:9px;color:var(--tx);font-weight:600}
+.auth-error{min-height:20px;color:var(--dn);font-size:12px;line-height:1.5;margin-top:9px}
+@media(max-width:420px){#auth-page{padding:24px 0 40px}.auth-panel{padding:18px}.auth-title{font-size:26px}}
+
 </style>
 </head>
 <body>
@@ -110,13 +136,17 @@ nav .on{color:var(--tx);font-weight:700}nav .on::before{content:'';position:abso
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script>
 let K='worklife.v1';
-const APP_VERSION='3.0.0';
+const APP_VERSION='3.2.1';
 const DEF=()=>({set:{wage:400,std:8,m1:1.5,m2:2,m3:3,brk:60,shifts:'05:00=55, 06:00=0',grace:0,lm:1,bonus:0,bmode:'d',sso:0,goal:0,budget:0,theme:'auto'},att:[],tx:[],adj:[]});
 const CATS={expense:['อาหาร','เดินทาง','บิล/ที่พัก','ช้อปปิ้ง','สุขภาพ','บันเทิง','อื่นๆ'],income:['งานเสริม','เงินคืน','อื่นๆ']};
 // ตั้งค่าคลาวด์ (Firebase) — ใส่ค่าสองบรรทัดนี้ครั้งเดียว ผู้ใช้คนอื่นจะสมัครใช้ได้ทันที (ดู cloud-setup.md)
-const CLOUD={apiKey:'AIzaSyDbLD6cGnNOysFDJoXARBYdKt1RBdSNHbA',authDomain:'storage-in-work.firebaseapp.com',projectId:'storage-in-work',appId:'1:896460521828:web:9706e7e4dd5050362dba71',messagingSenderId:'896460521828'};
+const CLOUD={apiKey:'AIzaSyDbLD6cGnNOysFDJoXARBYdKt1RBdSNHbA',authDomain:'storage-in-work.firebaseapp.com',projectId:'storage-in-work',storageBucket:'storage-in-work.firebasestorage.app',appId:'1:896460521828:web:9706e7e4dd5050362dba71',messagingSenderId:'896460521828'};
 let FB=null,AUTH=null,DB=null,rtUnsub=null,activeUid=null,guestSnapshot=null;
+let authReady=false,authUser=null,guestMode=false,authMode='in';
 const SK='worklife.cloud';
+const WS='worklife.workspace.v1';
+let WSOPT=(()=>{try{return Object.assign({mode:'local',opacity:72,blur:0},JSON.parse(localStorage.getItem(WS))||{}, {mode:'local'})}catch(e){return{mode:'local',opacity:72,blur:0}}})();
+let wsObjectUrl=null;
 let SY=(()=>{try{return JSON.parse(localStorage.getItem(SK))||{}}catch(e){return{}}})(),syT=null,syBusy=false;
 const sySave=()=>{try{localStorage.setItem(SK,JSON.stringify({apiKey:SY.apiKey,authDomain:SY.authDomain,projectId:SY.projectId,appId:SY.appId,messagingSenderId:SY.messagingSenderId}))}catch(e){}};
 let S=load(),tab='home',mon='',ft='expense',dOpen=true,AJ=[],TE=null;
@@ -167,9 +197,14 @@ const ICON={home:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1
 const TABS=[['home','วันนี้'],['time','เวลางาน'],['money','การเงิน'],['set','ตั้งค่า']];
 function go(t){tab=t;render();window.scrollTo(0,0)}
 function render(){
+ if(AUTH&&authReady&&!authUser&&!guestMode){document.getElementById('nav').innerHTML='';document.getElementById('app').innerHTML=authPage();return}
  document.getElementById('nav').innerHTML=TABS.map(t=>`<button class="${tab===t[0]?'on':''}" onclick="go('${t[0]}')">${t[1]}</button>`).join('');
  const T={home:'วันนี้',time:'เวลางาน',money:'การเงิน',set:'ตั้งค่า'}[tab],d=new Date().toLocaleDateString('th-TH',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
  document.getElementById('app').innerHTML=`<div class="hd"><small>WorkLife Professional · v${APP_VERSION} · ${d}</small><h1>${T}</h1><button class="hq" onclick="guide()" aria-label="คู่มือการใช้งาน">?</button></div>`+({home:vHome,time:vTime,money:vMoney,set:vSet})[tab]();
+}
+function authPage(){
+ const signup=authMode==='up';
+ return `<section id="auth-page"><div class="auth-wrap"><div class="auth-mark">W</div><div class="auth-brand">WORKLIFE PROFESSIONAL</div><h1 class="auth-title">${signup?'สร้างบัญชีของคุณ':'ยินดีต้อนรับกลับ'}</h1><p class="auth-lead">${signup?'สมัครสมาชิกเพื่อเก็บข้อมูลและซิงก์งานของคุณทุกอุปกรณ์':'เข้าสู่ระบบเพื่อดูเวลาทำงาน รายได้ และข้อมูลของคุณ'}</p><div class="auth-panel"><div class="auth-tabs"><button class="${!signup?'on':''}" onclick="authMode='in';SY.msg='';render()">เข้าสู่ระบบ</button><button class="${signup?'on':''}" onclick="authMode='up';SY.msg='';render()">สมัครสมาชิก</button></div><div class="fld"><label>อีเมล</label><input type="email" id="sy_e" autocomplete="email" inputmode="email" placeholder="name@example.com"></div><div class="fld"><label>รหัสผ่าน</label><input type="password" id="sy_p" autocomplete="${signup?'new-password':'current-password'}" placeholder="อย่างน้อย 6 ตัวอักษร" onkeydown="if(event.key==='Enter')syAuth('${signup?'up':'in'}')"></div><div class="auth-error" id="sy">${esc(SY.msg||'')}</div><button class="btn p auth-main" onclick="syAuth('${signup?'up':'in'}')">${signup?'สร้างบัญชี':'เข้าสู่ระบบ'}</button>${signup?'':'<button class="lnk" style="display:block;width:100%;margin-top:12px" onclick="syForgot()">ลืมรหัสผ่าน?</button>'}<div class="auth-divider">หรือ</div><button class="auth-google" onclick="syGoogle()"><b>G</b> ดำเนินการต่อด้วย Google</button></div><button class="auth-guest" onclick="guestMode=true;render()">ทดลองใช้โดยไม่เข้าสู่ระบบ</button><p class="auth-foot">ข้อมูลบัญชีจะแยกจากผู้ใช้อื่น และซิงก์ข้ามอุปกรณ์เมื่อเข้าสู่ระบบ<br>การทดลองใช้โดยไม่เข้าสู่ระบบจะเก็บข้อมูลไว้ในอุปกรณ์นี้เท่านั้น</p></div></section>`
 }
 const hmm=m=>pad(Math.floor(m/60))+':'+pad(Math.round(m)%60);
 function hero(){const e=todayE(),n=new Date(),k=!e?0:isLv(e)?4:e.out?3:e.bs?2:1,L=['ยังไม่เข้างาน','กำลังทำงาน','กำลังพัก','เลิกงานแล้ว',LV[e&&e.dt]||''][k],CC=['','ac','ot','up','ot'][k];
@@ -249,8 +284,23 @@ function vSet(){const s=S.set,H='step="0.5"';
  <div class="c"><h4>กะและความตรงต่อเวลา</h4>${F('shifts','เวลากะ = ค่ากะ','','เช่น 05:00=55, 06:00=0 (คั่นด้วยคอมมา) ระบบเลือกกะใกล้เวลาเข้างานให้เอง','text')}${F('grace','ผ่อนผันสาย','นาที')}${F('lm','ตัวคูณหักสาย','เท่า','1 = หักตามค่าแรงรายชั่วโมง','number',H)}${F('bonus','เบี้ยขยัน/สแกนตรงเวลา','บาท','0 = ไม่มี')}<div class="fld"><label>เบี้ยขยันจ่ายแบบ</label><div class="seg"><button class="${s.bmode==='d'?'on':''}" onclick="setv('bmode','d','text');render()">ต่อวัน (เข้าตรงเวลา)</button><button class="${s.bmode==='m'?'on':''}" onclick="setv('bmode','m','text');render()">ต่อเดือน (ไม่สายเลย)</button></div></div></div>
  <div class="c"><h4>การเงิน</h4>${F('budget','งบรายจ่ายต่อเดือน','บาท','0 = ไม่ใช้งบ')}${F('goal','เป้าหมายออมต่อเดือน','บาท','0 = ไม่ตั้งเป้า')}<div class="fld"><label>หมวดรายจ่าย (คั่นด้วย ,)</label><input value="${esc(cats('expense').join(', '))}" onchange="S.set.ce=this.value;save()"></div><div class="fld"><label>หมวดรายรับอื่นๆ (คั่นด้วย ,)</label><input value="${esc(cats('income').join(', '))}" onchange="S.set.ci=this.value;save()"></div></div>
  <div class="c"><h4>ธีม</h4><div class="seg" style="margin-top:10px">${[['auto','ตามเครื่อง'],['light','สว่าง'],['dark','มืด']].map(x=>`<button class="${s.theme===x[0]?'on':''}" onclick="setTheme('${x[0]}')">${x[1]}</button>`).join('')}</div></div>
+ ${workspaceCard()}
  ${syCard()}<div class="c"><h4>ข้อมูล</h4><p class="sub" style="margin-top:4px">ข้อมูลเก็บในเบราว์เซอร์เครื่องนี้เท่านั้น ควรส่งออกสำรองไว้เป็นระยะ</p><div class="two"><button class="btn s" onclick="exp()">คัดลอกข้อมูลสำรอง</button><button class="btn s" onclick="impOpen()">นำเข้าข้อมูล</button></div><button class="btn s" onclick="expCsv()">คัดลอกตารางเวลา (CSV)</button><button class="btn g" onclick="ask('ลบข้อมูลทั้งหมด?',()=>{S=DEF();save();render()})">ล้างข้อมูลทั้งหมด</button></div>
  <p class="sub" style="padding:0 4px 8px">เกณฑ์เตือนสุขภาพ (12 ชม./วัน, โอที 36 ชม./สัปดาห์, พักระหว่างกะ 11 ชม. ขึ้นไป, ทำติดกันไม่เกิน 6 วัน) เป็นแนวทางทั่วไป ไม่ใช่คำแนะนำทางกฎหมายหรือการแพทย์</p>`}
+// My Workspace 3.2.1: local-only background image stored in IndexedDB. No Firebase Storage dependency.
+const wsDb=()=>new Promise((resolve,reject)=>{const q=indexedDB.open('worklife-workspace',1);q.onupgradeneeded=()=>{if(!q.result.objectStoreNames.contains('assets'))q.result.createObjectStore('assets')};q.onsuccess=()=>resolve(q.result);q.onerror=()=>reject(q.error)});
+async function wsLocalPut(blob){const db=await wsDb();return new Promise((resolve,reject)=>{const tx=db.transaction('assets','readwrite');tx.objectStore('assets').put(blob,'background');tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)})}
+async function wsLocalGet(){const db=await wsDb();return new Promise((resolve,reject)=>{const q=db.transaction('assets').objectStore('assets').get('background');q.onsuccess=()=>resolve(q.result||null);q.onerror=()=>reject(q.error)})}
+async function wsLocalDelete(){const db=await wsDb();return new Promise((resolve,reject)=>{const tx=db.transaction('assets','readwrite');tx.objectStore('assets').delete('background');tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)})}
+function wsSaveOpts(){try{WSOPT.mode='local';localStorage.setItem(WS,JSON.stringify(WSOPT))}catch(e){}}
+function wsApply(blob){if(wsObjectUrl)URL.revokeObjectURL(wsObjectUrl);wsObjectUrl=blob?URL.createObjectURL(blob):null;const b=document.body;if(wsObjectUrl){b.classList.add('has-workspace-bg');b.style.setProperty('--ws-image',`url("${wsObjectUrl}")`);b.style.setProperty('--ws-dim',String(1-(Number(WSOPT.opacity??72)/100)));b.style.setProperty('--ws-glass',`${Math.max(0,Math.min(85,100-Number(WSOPT.opacity??72)))}%`);b.style.setProperty('--ws-blur',`${Math.max(0,Math.min(12,Number(WSOPT.blur)||0))}px`)}else{b.classList.remove('has-workspace-bg');b.style.removeProperty('--ws-image')}}
+async function wsInit(){try{const b=await wsLocalGet();wsApply(b)}catch(e){console.warn('Workspace image unavailable',e)}}
+function workspaceCard(){return `<div class="c"><div class="row2"><h4>My Workspace · พื้นหลังของฉัน</h4><span class="tag">ON DEVICE</span></div><p class="sub" style="margin-top:5px;line-height:1.7">เลือกรูปจากอุปกรณ์เพื่อใช้เป็นพื้นหลังทั้งหน้า Login และหน้าใช้งาน ปรับความเข้มและความเบลอได้ รูปจะไม่ถูกอัปโหลดไป Firebase</p><input id="ws_file" type="file" accept="image/jpeg,image/png,image/webp" hidden onchange="wsChoose(this)"><button class="btn s" onclick="document.getElementById('ws_file').click()">เลือกรูปจากอุปกรณ์</button><div class="fld"><label>ความเข้มพื้นหลัง · ${WSOPT.opacity}%</label><input type="range" min="15" max="100" value="${WSOPT.opacity}" oninput="wsTune('opacity',this.value)"></div><div class="fld"><label>ความเบลอ · ${WSOPT.blur}px</label><input type="range" min="0" max="12" value="${WSOPT.blur}" oninput="wsTune('blur',this.value)"></div><button class="btn s" onclick="wsReset()">คืนค่าพื้นหลังเดิม</button><div class="sub" id="ws_status" style="margin-top:8px">รูปจัดเก็บในอุปกรณ์นี้เท่านั้น ไม่ใช้ Firebase Storage และไม่เสียค่า Cloud เพิ่ม</div></div>`}
+function wsTune(k,v){WSOPT[k]=+v;wsSaveOpts();wsLocalGet().then(wsApply).catch(()=>{})}
+async function wsCompress(file){if(!file||!/^image\/(jpeg|png|webp)$/.test(file.type))throw new Error('รองรับไฟล์ JPG, PNG หรือ WebP เท่านั้น');if(file.size>15*1024*1024)throw new Error('รูปต้นฉบับใหญ่เกิน 15 MB');const img=await createImageBitmap(file);const scale=Math.min(1,1800/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.max(1,Math.round(img.width*scale));c.height=Math.max(1,Math.round(img.height*scale));const x=c.getContext('2d');x.drawImage(img,0,0,c.width,c.height);img.close();return await new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(new Error('แปลงรูปไม่สำเร็จ')),'image/jpeg',.84))}
+async function wsChoose(input){const f=input.files&&input.files[0];if(!f)return;try{wsStatus('กำลังปรับขนาดและบันทึกรูป…');const blob=await wsCompress(f);await wsLocalPut(blob);wsApply(blob);wsStatus('บันทึกรูปไว้ในอุปกรณ์นี้แล้ว')}catch(e){wsStatus('ทำรายการไม่สำเร็จ: '+(e.message||e))}input.value=''}
+function wsStatus(m){const e=document.getElementById('ws_status');if(e)e.textContent=m}
+async function wsReset(){try{await wsLocalDelete();wsApply(null);wsStatus('คืนค่าพื้นหลังเดิมแล้ว')}catch(e){wsStatus('คืนค่าไม่สำเร็จ: '+e.message)}}
 const syCfg=()=>({k:(CLOUD.apiKey||SY.apiKey||'').trim(),d:(CLOUD.authDomain||SY.authDomain||'').trim(),p:(CLOUD.projectId||SY.projectId||'').trim(),a:(CLOUD.appId||SY.appId||'').trim(),m:(CLOUD.messagingSenderId||SY.messagingSenderId||'').trim()});
 function initFirebase(){const c=syCfg();if(!c.k||!c.d||!c.p||!c.a)return false;try{FB=firebase.apps.length?firebase.app():firebase.initializeApp({apiKey:c.k,authDomain:c.d,projectId:c.p,appId:c.a,messagingSenderId:c.m||undefined});AUTH=firebase.auth();DB=firebase.firestore();return true}catch(e){console.error(e);return false}}
 function syState(m){SY.msg=m;const el=document.getElementById('sy');if(el)el.textContent=m}
@@ -272,7 +322,7 @@ async function syFirst(){try{const rem=await syRow();if(rem){const localHas=!!(S
  const guest=guestSnapshot||DEF();if(guest.att.length||guest.tx.length||guest.adj.length){window._guest=guest;sheet(`<div class="grab"></div><h3>ย้ายข้อมูลเดิมเข้าบัญชีนี้?</h3><p class="sub">พบข้อมูลเดิมในเครื่อง ${guest.att.length} รายการเวลาทำงาน และ ${guest.tx.length} รายการการเงิน ต้องการนำเข้าไปยังบัญชีนี้หรือไม่?</p><button class="btn p" onclick="syMigrateGuest()">นำข้อมูลเดิมเข้าบัญชีนี้</button><button class="btn s" onclick="syStartEmpty()">เริ่มต้นด้วยข้อมูลว่าง</button>`)}else{await syWrite();startRealtime();render();syState('สมัคร/เข้าสู่ระบบสำเร็จ · Real-time เปิดอยู่')}}catch(e){syState(thErr(e));render()}}
 async function syMigrateGuest(){S=window._guest||DEF();S.ts=Date.now();localStorage.setItem(K,JSON.stringify(S));localStorage.removeItem('worklife.v1');closeSh();await syPush();startRealtime();render()}
 async function syStartEmpty(){S=DEF();S.ts=Date.now();localStorage.setItem(K,JSON.stringify(S));localStorage.removeItem('worklife.v1');closeSh();await syPush();startRealtime();render()}
-function syOut(){stopRealtime();if(AUTH)AUTH.signOut();SY.s=null;sySave();activeUid=null;K='worklife.guest.v1';S=load();SY.msg='ออกจากระบบแล้ว · ข้อมูลบัญชีถูกเก็บแยกไว้';render()}
+function syOut(){stopRealtime();SY.s=null;authUser=null;guestMode=false;sySave();if(AUTH)AUTH.signOut();activeUid=null;K='worklife.v1';S=load();SY.msg='ออกจากระบบแล้ว · เข้าสู่ระบบเพื่อซิงก์ข้อมูล';render()}
 function syCfgSave(){SY.apiKey=document.getElementById('sy_ak').value.trim();SY.authDomain=document.getElementById('sy_ad').value.trim();SY.projectId=document.getElementById('sy_pid').value.trim();SY.appId=document.getElementById('sy_app').value.trim();sySave();initFirebase();render()}
 const syCard=()=>{const c=syCfg();
  if(!c.k||!c.d||!c.p||!c.a)return`<div class="c"><h4>บัญชีและซิงก์ข้อมูล</h4><p class="sub" style="margin-top:4px;line-height:1.7">ตั้งค่า Firebase Web App เพียงครั้งเดียวในไฟล์ index.html ตามคู่มือ จากนั้นทุกคนจะสมัครบัญชีของตัวเองได้ ไม่ต้องกรอก API Key ในหน้าแอป</p><div class="sub mo" id="sy">${esc(SY.msg||'ยังไม่ได้ตั้งค่า Firebase')}</div></div>`;
@@ -329,10 +379,14 @@ function imp(){const t=document.getElementById('tx');try{const j=JSON.parse(t.va
 function ask(m,fn){window._f=fn;sheet(`<div class="grab"></div><h3>${m}</h3><div class="two"><button class="btn s" onclick="closeSh()">ยกเลิก</button><button class="btn d" onclick="closeSh();_f()">ยืนยัน</button></div>`)}
 function sheet(h){document.getElementById('sh').innerHTML=h;document.getElementById('ov').classList.add('show')}
 function closeSh(){document.getElementById('ov').classList.remove('show');document.getElementById('sh').innerHTML=''}
-applyTheme();mon=ym(new Date());render();
+applyTheme();mon=ym(new Date());wsInit();
+if(initFirebase()){
+ authReady=true;AUTH.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});
+ AUTH.onAuthStateChanged(async user=>{authUser=user||null;authReady=true;if(user){guestMode=false;try{await setSess(user);switchLocalAccount(user.uid);await syFirst()}catch(e){syState(thErr(e));render()}}else{stopRealtime();if(activeUid){activeUid=null;K='worklife.v1';S=load()}render()}});
+}else{authReady=false;SY.msg='กรุณาตั้งค่า Firebase Web App ตาม cloud-setup.md'}
+render();
 if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
 instInit();
-if(initFirebase()){AUTH.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});AUTH.onAuthStateChanged(async user=>{if(user){try{await setSess(user);switchLocalAccount(user.uid);await syFirst()}catch(e){syState(thErr(e))}}else{stopRealtime();if(activeUid){activeUid=null;K='worklife.v1';S=load();render()}}})}else{SY.msg='กรุณาตั้งค่า Firebase Web App ตาม cloud-setup.md'}
 if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 setInterval(()=>{const e=todayE();if(tab==='home'&&e&&!e.out&&!document.getElementById('ov').classList.contains('show'))render()},30000);
 </script>
