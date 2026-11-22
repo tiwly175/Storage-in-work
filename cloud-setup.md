@@ -12,7 +12,7 @@
 1. ไปที่ https://console.firebase.google.com แล้วสร้างโปรเจกต์
 2. เข้า Project settings → General → Your apps → Add app → Web (`</>`)
 3. ลงทะเบียน Web App แล้วคัดลอกค่าจาก Firebase config ได้แก่ `apiKey`, `authDomain`, `projectId`, `appId` และ `messagingSenderId`
-4. แก้ตัวแปร `CLOUD` ช่วงต้น `index.html` ให้เป็นค่าจริง:
+4. ในชุดไฟล์ที่เตรียมให้ ได้ใส่ Firebase Web App config ของโปรเจกต์ `storage-in-work` ไว้ในตัวแปร `CLOUD` ของ `index.html` แล้ว หากสร้างโปรเจกต์ใหม่หรือเปลี่ยนแอป ค่อยแก้ค่าให้ตรงกับ Firebase config ของโปรเจกต์นั้น:
 
 ```js
 const CLOUD={
