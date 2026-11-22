@@ -1,11 +1,15 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // แต่ละบัญชีอ่าน/เขียนได้เฉพาะเอกสารของตัวเองเท่านั้น
+    // ผู้ใช้เข้าถึงได้เฉพาะเอกสารที่ UID ตรงกับบัญชี Firebase Authentication ของตน
     match /users/{uid} {
-      allow read, delete: if request.auth != null && request.auth.uid == uid;
-      allow create, update: if request.auth != null && request.auth.uid == uid
-        && request.resource.data.data.size() < 900000;
+      allow get, delete: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['data', 'ts'])
+        && request.resource.data.data is string
+        && request.resource.data.data.size() < 900000
+        && request.resource.data.ts is int;
     }
   }
 }

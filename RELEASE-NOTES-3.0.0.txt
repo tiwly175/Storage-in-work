@@ -1,0 +1,12 @@
+WorkLife Professional 3.0.0
+
+- Added Firebase Authentication with Email/Password and Google popup sign-in.
+- Added Firestore onSnapshot real-time updates across devices.
+- Scoped local storage by Firebase UID to prevent cross-account local data exposure.
+- Added explicit legacy data migration prompt.
+- Updated Firestore rules to enforce UID ownership and document shape/size.
+- Updated PWA cache version and deployment documentation.
+- Retained the existing worklife.v1 data structure for migration compatibility.
+
+Deployment requires owner-provided Firebase Web App config and Firebase Console setup.
+Google sign-in requires the GitHub Pages domain to be authorized.
