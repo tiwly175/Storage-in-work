@@ -30,7 +30,7 @@ Firebase Web API key เป็นค่าระบุโปรเจกต์ �
 1. Firebase Console → Build → Authentication → Get started
 2. Sign-in method → เปิด Email/Password
 3. เปิด Google provider และกำหนด Support email
-4. Authentication → Settings → Authorized domains เพิ่มโดเมน GitHub Pages เช่น `YOUR_GITHUB_NAME.github.io`
+4. Authentication → Settings → Authorized domains เพิ่มโดเมน `tiwly175.github.io`
 5. หากใช้โดเมนกำหนดเอง ให้เพิ่มโดเมนนั้นด้วย
 
 ## 3. สร้าง Firestore และตั้ง Security Rules
